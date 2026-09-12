@@ -9,6 +9,7 @@ import { openApiDocument } from './config/swagger';
 import apiRoutes from './routes';
 import { globalLimiter } from './middleware/rateLimit';
 import { errorHandler, notFoundHandler } from './middleware/errorHandler';
+import { metricsMiddleware, getMetrics, register } from './middleware/metrics';
 
 export function createApp(): Express {
   const app = express();
@@ -39,7 +40,14 @@ export function createApp(): Express {
   app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(openApiDocument));
   app.get('/api/docs.json', (_req, res) => res.json(openApiDocument));
 
+  app.use(metricsMiddleware);
+
   app.get('/api/health', (_req, res) => res.status(200).json({ status: 'ok' }));
+
+  app.get('/api/metrics', async (_req, res) => {
+    res.set('Content-Type', register.contentType);
+    res.end(await getMetrics());
+  });
 
   app.use(globalLimiter);
   app.use('/api', apiRoutes);

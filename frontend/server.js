@@ -4,6 +4,7 @@ const path = require('path');
 const express = require('express');
 const cors = require('cors');
 const session = require('express-session');
+const promClient = require('prom-client');
 const db = require('./lib/db');
 
 const indexRouter = require('./routes/index');
@@ -15,6 +16,21 @@ const wallRouter = require('./routes/wall');
 
 const app = express();
 const PORT = Number(process.env.PORT) || 3000;
+
+promClient.collectDefaultMetrics({ prefix: 'wonderkids_' });
+
+const httpRequestsTotal = new promClient.Counter({
+  name: 'wonderkids_http_requests_total',
+  help: 'Total number of HTTP requests processed',
+  labelNames: ['route', 'status']
+});
+
+const httpRequestDurationSeconds = new promClient.Histogram({
+  name: 'wonderkids_http_request_duration_seconds',
+  help: 'Duration of HTTP requests in seconds',
+  labelNames: ['route'],
+  buckets: [0.005, 0.01, 0.025, 0.05, 0.1, 0.25, 0.5, 1, 2.5, 5, 10]
+});
 
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
@@ -58,6 +74,35 @@ app.use((req, res, next) => {
     res.set('Surrogate-Control', 'no-store');
   }
   next();
+});
+
+// Metrics: count every request, expose /metrics, and proxy backend /api/metrics
+app.use((req, res, next) => {
+  const start = process.hrtime();
+  res.on('finish', () => {
+    const route = (req.route && req.route.path) || req.path || '';
+    const [seconds, nanoseconds] = process.hrtime(start);
+    httpRequestDurationSeconds.labels(route).observe(seconds + nanoseconds / 1e9);
+    httpRequestsTotal.labels(route, String(res.statusCode)).inc();
+  });
+  next();
+});
+
+app.get('/metrics', async (_req, res) => {
+  res.set('Content-Type', promClient.register.contentType);
+  res.end(await promClient.register.metrics());
+});
+
+app.get('/api/metrics', async (_req, res) => {
+  const backendHost = process.env.BACKEND_SERVICE || 'backend';
+  const backendPort = process.env.BACKEND_PORT || 4000;
+  try {
+    const upstream = await fetch(`http://${backendHost}:${backendPort}/api/metrics`);
+    res.set('Content-Type', promClient.register.contentType);
+    res.status(upstream.status).end(await upstream.text());
+  } catch (err) {
+    res.status(502).send('# backend /api/metrics unreachable');
+  }
 });
 
 app.use('/', indexRouter);

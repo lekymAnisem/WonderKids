@@ -42,6 +42,11 @@ cat >> $PROM_DIR/prometheus.yml << PROMCFG2
     metrics_path: /api/metrics
     static_configs:
       - targets: ["${app_metrics_url}"]
+
+  - job_name: "wonderkids-frontend"
+    metrics_path: /metrics
+    static_configs:
+      - targets: ["${app_metrics_url}"]
 PROMCFG2
 %{ endif ~}
 
