@@ -160,11 +160,16 @@ pipeline {
                                             --secret-id wonderkids-secrets \
                                             --query SecretString --output text)
 
-                                        DIRECT_URL=$(echo "$SECRET_JSON" | node -e "const s=JSON.parse(require('fs').readFileSync(0,'utf8')); process.stdout.write(s.DIRECT_URL || s.DATABASE_URL || '')")
-                                        DATABASE_URL=$(echo "$SECRET_JSON" | node -e "const s=JSON.parse(require('fs').readFileSync(0,'utf8')); process.stdout.write(s.DATABASE_URL || s.DIRECT_URL || '')")
+                                        get_secret_value() {
+                                            printf '%s\n' "$SECRET_JSON" | tr -d '\r' | sed -n "s/^[[:space:]]*\"*$1\"*[[:space:]]*=[[:space:]]*\"\(.*\)\"[[:space:]]*$/\1/p"
+                                        }
 
-                                        test -n "$DIRECT_URL" || { echo "ERROR: DIRECT_URL not found in wonderkids-secrets"; exit 1; }
-                                        test -n "$DATABASE_URL" || { echo "ERROR: DATABASE_URL not found in wonderkids-secrets"; exit 1; }
+                                        DIRECT_URL=$(get_secret_value DIRECT_URL)
+                                        DATABASE_URL=$(get_secret_value DATABASE_URL)
+
+                                        test -n "$DIRECT_URL" || DIRECT_URL="$DATABASE_URL"
+                                        test -n "$DATABASE_URL" || DATABASE_URL="$DIRECT_URL"
+                                        test -n "$DIRECT_URL" || { echo "ERROR: DATABASE_URL/DIRECT_URL not found in wonderkids-secrets"; exit 1; }
 
                                         export DATABASE_URL DIRECT_URL
                                         npm test
