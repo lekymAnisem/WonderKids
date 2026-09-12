@@ -38,7 +38,7 @@ services:
       targetPort: 4000
     image:
       repository: wonderkids-production-backend
-      tag: '13'
+      tag: '14'
       pullPolicy: IfNotPresent
     envVars: {}
     livenessProbe:
@@ -77,7 +77,7 @@ services:
       targetPort: 3000
     image:
       repository: wonderkids-production-frontend
-      tag: '13'
+      tag: '14'
       pullPolicy: IfNotPresent
     envVars: {}
     livenessProbe:
