@@ -20,6 +20,6 @@ COPY prisma ./prisma
 COPY --from=base /app/node_modules ./node_modules
 COPY --from=build /app/dist ./dist
 RUN mkdir -p uploads && chown -R node:node /app
-USER node
+USER 1000
 EXPOSE 4000
 CMD ["sh", "-lc", "npx prisma migrate deploy && node dist/server.js"]

@@ -11,6 +11,6 @@ COPY public ./public
 COPY lib ./lib
 COPY data ./data
 RUN mkdir -p uploads && chown -R node:node /app
-USER node
+USER 1000
 EXPOSE 3000
 CMD ["node", "server.js"]
