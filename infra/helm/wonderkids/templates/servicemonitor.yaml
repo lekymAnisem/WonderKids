@@ -1,0 +1,33 @@
+{{- if and .Values.metrics.enabled .Values.metrics.serviceMonitor.enabled }}
+{{- range $key, $svc := .Values.services }}
+{{- if and $svc.enabled (not $svc.skipMetrics) }}
+{{- $name := $svc.name | default $key }}
+{{- $component := $key }}
+{{- $path := $svc.metricsPath | default $.Values.metrics.path }}
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ $name }}
+  namespace: {{ $.Values.namespace }}
+  labels:
+    {{- include "wonderkids.labels" $ | nindent 4 }}
+    {{- range $k, $v := $.Values.metrics.serviceMonitor.labels }}
+    {{ $k }}: {{ $v | quote }}
+    {{- end }}
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "wonderkids.name" $ }}
+      app.kubernetes.io/component: {{ $component }}
+  namespaceSelector:
+    matchNames:
+      - {{ $.Values.namespace }}
+  endpoints:
+    - port: http
+      path: {{ $path }}
+      interval: {{ $.Values.metrics.interval }}
+      scrapeTimeout: {{ $.Values.metrics.scrapeTimeout }}
+{{- end }}
+{{- end }}
+{{- end }}
