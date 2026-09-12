@@ -161,17 +161,7 @@ pipeline {
                                             --query SecretString --output text)
 
                                         get_secret_value() {
-                                            printf '%s\n' "$SECRET_JSON" | tr -d '\r' | while IFS= read -r line; do
-                                                case "$line" in
-                                                    *\"$1\"=*)
-                                                        line=${line#*\"$1\"=}
-                                                        line=${line#\"}
-                                                        line=${line%\"}
-                                                        printf '%s\n' "$line"
-                                                        break
-                                                        ;;
-                                                esac
-                                            done
+                                            printf '%s\n' "$SECRET_JSON" | grep "$1" | cut -d= -f2- | tr -d '"'
                                         }
 
                                         DIRECT_URL=$(get_secret_value DIRECT_URL)
