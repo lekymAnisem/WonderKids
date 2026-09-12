@@ -1,35 +1,30 @@
-# WonderKids Helm values
-# Environment: production
-# Namespace: wonderkids
-
 namespace: wonderkids
-nameOverride: ""
-fullnameOverride: ""
-imageRegistry: "218619602282.dkr.ecr.ap-southeast-2.amazonaws.com"
+nameOverride: ''
+fullnameOverride: ''
+imageRegistry: 218619602282.dkr.ecr.ap-southeast-2.amazonaws.com
 global:
-  nodeEnv: "production"
-  configMapName: "wonderkids-config"
-  existingSecretName: "wonderkids-secrets"
-# Optional secrets via External Secrets Operator. Keep default safe values.
+  nodeEnv: production
+  configMapName: wonderkids-config
+  existingSecretName: wonderkids-secrets
 secrets:
   create: false
-  existingSecretName: "wonderkids-secrets"
+  existingSecretName: wonderkids-secrets
   externalSecret:
     enabled: false
-    storeName: "wonderkids-aws-secrets-manager"
-    remoteKey: "wonderkids-secrets"
-    region: "ap-southeast-2"
+    storeName: wonderkids-aws-secrets-manager
+    remoteKey: wonderkids-secrets
+    region: ap-southeast-2
     refreshInterval: 1h
-    serviceAccountName: "external-secrets"
-    serviceAccountNamespace: "external-secrets"
+    serviceAccountName: external-secrets
+    serviceAccountNamespace: external-secrets
 config:
-  NODE_ENV: "production"
-  PORT: "4000"
-  FRONTEND_PORT: "3000"
-  CORS_ORIGIN: "*"
-  SESSION_SECRET: "wonderkids_fallback_secret"
-  BACKEND_SERVICE: "backend"
-  FRONTEND_SERVICE: "frontend"
+  NODE_ENV: production
+  PORT: '4000'
+  FRONTEND_PORT: '3000'
+  CORS_ORIGIN: '*'
+  SESSION_SECRET: wonderkids_fallback_secret
+  BACKEND_SERVICE: backend
+  FRONTEND_SERVICE: frontend
 services:
   backend:
     enabled: true
@@ -43,7 +38,7 @@ services:
       targetPort: 4000
     image:
       repository: wonderkids-production-backend
-      tag: "1"
+      tag: '11'
       pullPolicy: IfNotPresent
     envVars: {}
     livenessProbe:
@@ -64,11 +59,11 @@ services:
       failureThreshold: 3
     resources:
       requests:
-        cpu: "100m"
-        memory: "128Mi"
+        cpu: 100m
+        memory: 128Mi
       limits:
-        cpu: "500m"
-        memory: "256Mi"
+        cpu: 500m
+        memory: 256Mi
   frontend:
     enabled: true
     name: frontend
@@ -82,7 +77,7 @@ services:
       targetPort: 3000
     image:
       repository: wonderkids-production-frontend
-      tag: "1"
+      tag: '11'
       pullPolicy: IfNotPresent
     envVars: {}
     livenessProbe:
@@ -103,17 +98,17 @@ services:
       failureThreshold: 3
     resources:
       requests:
-        cpu: "50m"
-        memory: "64Mi"
+        cpu: 50m
+        memory: 64Mi
       limits:
-        cpu: "250m"
-        memory: "128Mi"
+        cpu: 250m
+        memory: 128Mi
 ingress:
   enabled: true
   className: nginx
   annotations:
-    nginx.ingress.kubernetes.io/proxy-body-size: "2m"
-    nginx.ingress.kubernetes.io/use-regex: "true"
+    nginx.ingress.kubernetes.io/proxy-body-size: 2m
+    nginx.ingress.kubernetes.io/use-regex: 'true'
   rules:
     - host: wonderkids.local
       paths:
