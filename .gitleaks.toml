@@ -1,0 +1,10 @@
+title = "Gitleaks config"
+
+# Extend the default Gitleaks ruleset
+[allowlist]
+description = "Global allowlist"
+paths = [
+    '''gitleaks\.toml''', # Ignore config itself
+    '''node_modules/'''
+]
+# Add specific secret hashes or regular expressions to allowlist here if needed

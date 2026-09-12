@@ -1,0 +1,182 @@
+<%- include('partials/head', { title: title }) %>
+<body class="bg-background text-on-surface antialiased selection:bg-primary-fixed selection:text-on-primary-fixed">
+<%- include('partials/navbar', { progress: progress, activeNav: activeNav }) %>
+
+<section class="relative overflow-hidden pt-8 pb-12 md:pt-14 md:pb-20">
+  <div class="absolute top-10 left-1/2 -translate-x-1/2 w-[700px] h-[300px] bg-tertiary-fixed/30 rounded-full blur-3xl pointer-events-none -z-10"></div>
+  <div class="max-w-[1240px] mx-auto px-6">
+    <div class="text-center max-w-3xl mx-auto flex flex-col items-center">
+      <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-tertiary-fixed/50 text-tertiary font-label-sm mb-5 shadow-sm">
+        <span class="material-symbols-outlined text-sm fill-icon" style="font-variation-settings: 'FILL' 1;">sports_esports</span>
+        <span>6 Playable Brain Games</span>
+      </div>
+      <h1 class="text-headline-lg-mobile md:text-display font-headline-lg md:font-display text-on-surface tracking-tight mb-4">
+        Games <span class="text-tertiary-container inline-block underline decoration-wavy decoration-tertiary-fixed-dim/70 decoration-2">Arcade</span>
+      </h1>
+      <p class="text-body-md md:text-body-lg font-body-md md:font-body-lg text-on-surface-variant max-w-2xl mb-8">
+        Puzzles, memory quests, counting challenges, and brain-boosting adventures designed for curious minds ages 4-12.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- Game Selector -->
+<section class="py-8" id="game-categories">
+  <div class="max-w-[1240px] mx-auto px-6">
+    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 mb-8">
+      <button class="game-selector-btn tactile-card rounded-2xl p-4 text-center hover:translate-y-[-2px] transition-all duration-200 border-2 border-tertiary-container bg-tertiary-fixed/20" data-game="math">
+        <div class="text-3xl mb-2">🧮</div>
+        <span class="text-xs font-label-sm font-bold text-on-surface">Math Quest</span>
+      </button>
+      <button class="game-selector-btn tactile-card rounded-2xl p-4 text-center hover:translate-y-[-2px] transition-all duration-200 border-2 border-transparent hover:border-secondary" data-game="memory">
+        <div class="text-3xl mb-2">🧠</div>
+        <span class="text-xs font-label-sm font-bold text-on-surface">Memory Match</span>
+      </button>
+      <button class="game-selector-btn tactile-card rounded-2xl p-4 text-center hover:translate-y-[-2px] transition-all duration-200 border-2 border-transparent hover:border-secondary" data-game="word">
+        <div class="text-3xl mb-2">📝</div>
+        <span class="text-xs font-label-sm font-bold text-on-surface">Word Scramble</span>
+      </button>
+      <button class="game-selector-btn tactile-card rounded-2xl p-4 text-center hover:translate-y-[-2px] transition-all duration-200 border-2 border-transparent hover:border-secondary" data-game="counting">
+        <div class="text-3xl mb-2">🔢</div>
+        <span class="text-xs font-label-sm font-bold text-on-surface">Counting Stars</span>
+      </button>
+      <button class="game-selector-btn tactile-card rounded-2xl p-4 text-center hover:translate-y-[-2px] transition-all duration-200 border-2 border-transparent hover:border-secondary" data-game="color">
+        <div class="text-3xl mb-2">🎨</div>
+        <span class="text-xs font-label-sm font-bold text-on-surface">Color Match</span>
+      </button>
+      <button class="game-selector-btn tactile-card rounded-2xl p-4 text-center hover:translate-y-[-2px] transition-all duration-200 border-2 border-transparent hover:border-secondary" data-game="pattern">
+        <div class="text-3xl mb-2">🧩</div>
+        <span class="text-xs font-label-sm font-bold text-on-surface">Pattern Puzzle</span>
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- Game Area -->
+<section class="py-8 pb-16">
+  <div class="max-w-[900px] mx-auto px-6">
+    <!-- Score bar -->
+    <div class="flex items-center justify-between mb-6 p-4 rounded-2xl bg-surface-container-low border border-surface-container">
+      <div class="flex items-center gap-2">
+        <span class="text-xl">⭐</span>
+        <span class="font-label-md font-bold text-on-surface">Score: <span id="gameScore">0</span></span>
+      </div>
+      <div class="flex items-center gap-2">
+        <span class="text-xl">🏆</span>
+        <span class="font-label-md font-bold text-on-surface">Round: <span id="gameRound">1</span></span>
+      </div>
+      <button id="gameRestartBtn" class="px-4 py-2 rounded-full bg-surface-container text-on-surface-variant text-xs font-label-sm font-bold hover:bg-surface-container-high transition-colors">
+        <span class="material-symbols-outlined text-sm align-middle mr-1">refresh</span> Restart
+      </button>
+    </div>
+
+    <!-- MATH QUEST -->
+    <div id="game-math" class="game-panel">
+      <div class="tactile-card rounded-3xl p-6 sm:p-10 custom-floating-shadow border-2 border-surface-container-highest">
+        <div class="text-center mb-6">
+          <h2 class="text-headline-md font-headline-md text-on-surface mb-2">🧮 Math Quest</h2>
+          <p class="text-body-sm font-body-sm text-on-surface-variant">Solve the math problem to earn stars!</p>
+        </div>
+        <div class="bg-surface-container-low rounded-2xl p-6 text-center mb-6 border border-surface-container">
+          <div class="text-5xl mb-4" id="mathProblem">5 + 3 = ?</div>
+          <div class="flex items-center justify-center gap-2 text-2xl" id="mathVisual">💎💎💎💎💎 + 💎💎💎</div>
+        </div>
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-4" id="mathAnswers"></div>
+        <div id="mathFeedback" class="mt-6 hidden"></div>
+      </div>
+    </div>
+
+    <!-- MEMORY MATCH -->
+    <div id="game-memory" class="game-panel hidden">
+      <div class="tactile-card rounded-3xl p-6 sm:p-10 custom-floating-shadow border-2 border-surface-container-highest">
+        <div class="text-center mb-6">
+          <h2 class="text-headline-md font-headline-md text-on-surface mb-2">🧠 Memory Match</h2>
+          <p class="text-body-sm font-body-sm text-on-surface-variant">Flip cards and find matching pairs!</p>
+          <div class="flex items-center justify-center gap-4 mt-3">
+            <span class="text-xs font-label-sm bg-secondary-fixed text-secondary px-3 py-1 rounded-full font-bold">Moves: <span id="memoryMoves">0</span></span>
+            <span class="text-xs font-label-sm bg-tertiary-fixed text-tertiary px-3 py-1 rounded-full font-bold">Pairs: <span id="memoryPairs">0</span>/6</span>
+          </div>
+        </div>
+        <div class="grid grid-cols-3 sm:grid-cols-4 gap-3 max-w-md mx-auto" id="memoryGrid"></div>
+        <div id="memoryFeedback" class="mt-6 hidden"></div>
+      </div>
+    </div>
+
+    <!-- WORD SCRAMBLE -->
+    <div id="game-word" class="game-panel hidden">
+      <div class="tactile-card rounded-3xl p-6 sm:p-10 custom-floating-shadow border-2 border-surface-container-highest">
+        <div class="text-center mb-6">
+          <h2 class="text-headline-md font-headline-md text-on-surface mb-2">📝 Word Scramble</h2>
+          <p class="text-body-sm font-body-sm text-on-surface-variant">Unscramble the letters to find the word!</p>
+          <div class="flex items-center justify-center gap-4 mt-3">
+            <span class="text-xs font-label-sm bg-secondary-fixed text-secondary px-3 py-1 rounded-full font-bold">Hint: <span id="wordHint">-</span></span>
+          </div>
+        </div>
+        <div class="text-center mb-6">
+          <div class="flex items-center justify-center gap-2 flex-wrap mb-6" id="scrambledLetters"></div>
+          <div class="flex items-center justify-center gap-2 flex-wrap mb-4" id="wordAnswer"></div>
+          <div class="flex items-center justify-center gap-3">
+            <button id="wordClear" class="px-5 py-2.5 rounded-full bg-surface-container text-on-surface-variant text-xs font-label-sm font-bold hover:bg-surface-container-high transition-colors">Clear</button>
+            <button id="wordShuffle" class="px-5 py-2.5 rounded-full bg-surface-container text-on-surface-variant text-xs font-label-sm font-bold hover:bg-surface-container-high transition-colors">Shuffle</button>
+          </div>
+        </div>
+        <div id="wordFeedback" class="mt-4 hidden"></div>
+      </div>
+    </div>
+
+    <!-- COUNTING STARS -->
+    <div id="game-counting" class="game-panel hidden">
+      <div class="tactile-card rounded-3xl p-6 sm:p-10 custom-floating-shadow border-2 border-surface-container-highest">
+        <div class="text-center mb-6">
+          <h2 class="text-headline-md font-headline-md text-on-surface mb-2">🔢 Counting Stars</h2>
+          <p class="text-body-sm font-body-sm text-on-surface-variant">Count the objects and pick the right number!</p>
+        </div>
+        <div class="bg-surface-container-low rounded-2xl p-8 text-center mb-6 border border-surface-container min-h-[120px] flex items-center justify-center flex-wrap gap-2" id="countingObjects"></div>
+        <div class="text-center mb-4">
+          <p class="font-headline-sm text-on-surface">How many do you see?</p>
+        </div>
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-4" id="countingAnswers"></div>
+        <div id="countingFeedback" class="mt-6 hidden"></div>
+      </div>
+    </div>
+
+    <!-- COLOR MATCH -->
+    <div id="game-color" class="game-panel hidden">
+      <div class="tactile-card rounded-3xl p-6 sm:p-10 custom-floating-shadow border-2 border-surface-container-highest">
+        <div class="text-center mb-6">
+          <h2 class="text-headline-md font-headline-md text-on-surface mb-2">🎨 Color Match</h2>
+          <p class="text-body-sm font-body-sm text-on-surface-variant">Tap the tiles that match the target color!</p>
+          <div class="flex items-center justify-center gap-4 mt-3">
+            <span class="text-xs font-label-sm bg-secondary-fixed text-secondary px-3 py-1 rounded-full font-bold">Found: <span id="colorFound">0</span>/<span id="colorTotal">0</span></span>
+          </div>
+        </div>
+        <div class="text-center mb-4">
+          <p class="text-sm font-label-sm text-on-surface-variant mb-2">Find all tiles with this color:</p>
+          <div class="inline-block w-16 h-16 rounded-2xl shadow-lg border-2 border-white" id="colorTarget"></div>
+        </div>
+        <div class="grid grid-cols-3 sm:grid-cols-4 gap-3 max-w-sm mx-auto" id="colorGrid"></div>
+        <div id="colorFeedback" class="mt-6 hidden"></div>
+      </div>
+    </div>
+
+    <!-- PATTERN PUZZLE -->
+    <div id="game-pattern" class="game-panel hidden">
+      <div class="tactile-card rounded-3xl p-6 sm:p-10 custom-floating-shadow border-2 border-surface-container-highest">
+        <div class="text-center mb-6">
+          <h2 class="text-headline-md font-headline-md text-on-surface mb-2">🧩 Pattern Puzzle</h2>
+          <p class="text-body-sm font-body-sm text-on-surface-variant">What comes next in the pattern?</p>
+        </div>
+        <div class="bg-surface-container-low rounded-2xl p-6 text-center mb-6 border border-surface-container">
+          <div class="flex items-center justify-center gap-3 text-4xl flex-wrap" id="patternSequence"></div>
+        </div>
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-4" id="patternAnswers"></div>
+        <div id="patternFeedback" class="mt-6 hidden"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<%- include('partials/parent-zone') %>
+<%- include('partials/footer') %>
+<script src="/js/games.js" defer></script>
+</body></html>

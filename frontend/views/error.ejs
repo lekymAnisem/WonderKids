@@ -1,0 +1,19 @@
+<%- include('partials/head', { title: title }) %>
+<body class="bg-background text-on-surface antialiased selection:bg-primary-fixed selection:text-on-primary-fixed">
+<%- include('partials/navbar', { progress: progress, activeNav: activeNav }) %>
+<section class="min-h-[60vh] flex items-center justify-center py-20">
+<div class="max-w-lg mx-auto px-6 text-center">
+<div class="w-20 h-20 mx-auto rounded-full bg-primary-fixed flex items-center justify-center text-primary mb-6 shadow-inner">
+<span class="material-symbols-outlined text-4xl fill-icon" style="font-variation-settings: 'FILL' 1;">sentiment_dissatisfied</span>
+</div>
+<span class="text-display-mobile font-display-mobile text-primary block"><%= status %></span>
+<h1 class="text-headline-md font-headline-md text-on-surface mt-2 mb-3">Oops, wrong trail!</h1>
+<p class="text-body-md font-body-md text-on-surface-variant mb-8"><%= message %></p>
+<a class="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-primary-container text-white font-label-md shadow-md hover:opacity-90 active:scale-95 transition-all custom-glow-primary" href="/">
+<span class="material-symbols-outlined text-sm">home</span>
+<span>Back to WonderKids</span>
+</a>
+</div>
+</section>
+<%- include('partials/footer') %>
+</body></html>

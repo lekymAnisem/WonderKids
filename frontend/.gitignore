@@ -1,0 +1,5 @@
+node_modules/
+.env
+data/artworks/
+npm-debug.log*
+.DS_Store

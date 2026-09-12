@@ -1,0 +1,665 @@
+<%- include('partials/head', { title: title }) %>
+<body class="bg-background text-on-surface antialiased selection:bg-primary-fixed selection:text-on-primary-fixed">
+<%- include('partials/navbar', { progress: progress, activeNav: activeNav }) %>
+<!-- ==================== 2. HERO SECTION (BEBLESSED.IO COMPOSITION) ==================== -->
+<section class="relative overflow-hidden pt-8 pb-16 md:pt-14 md:pb-24" id="hero">
+<!-- Atmospheric background blobs -->
+<div class="absolute top-12 left-1/2 -translate-x-1/2 w-[720px] h-[360px] bg-secondary-fixed/30 rounded-full blur-3xl pointer-events-none -z-10"></div>
+<div class="absolute top-40 right-10 w-64 h-64 bg-primary-fixed/40 rounded-full blur-2xl pointer-events-none -z-10"></div>
+<div class="max-w-[1240px] mx-auto px-6">
+<!-- Top Center Hero Copy Stack -->
+<div class="text-center max-w-3xl mx-auto flex flex-col items-center">
+<!-- Eyebrow Pill -->
+<div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-surface-container text-primary font-label-sm mb-5 shadow-sm border border-white">
+<span class="material-symbols-outlined text-sm text-tertiary-container fill-icon" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+<span>Safe, Ad-Free Digital Playground for Ages 4–12</span>
+</div>
+<!-- Main Headline -->
+<h1 class="text-headline-lg-mobile md:text-display font-headline-lg md:font-display text-on-surface tracking-tight mb-4">
+          Learn, Play &amp; <span class="text-primary-container inline-block underline decoration-wavy decoration-tertiary-fixed-dim/70 decoration-2">Imagine!</span>
+        </h1>
+<!-- Subtitle -->
+<p class="text-body-md md:text-body-lg font-body-md md:font-body-lg text-on-surface-variant max-w-2xl mb-8">
+          Discover fun interactive stories, creative coloring books, exciting educational games, and daily adventures made just for curious young minds.
+        </p>
+<!-- Hero Dual CTA Buttons -->
+<div class="flex flex-wrap items-center justify-center gap-4 mb-10 w-full sm:w-auto">
+<a class="w-full sm:w-auto px-8 py-4 rounded-full bg-primary-container text-on-primary font-label-lg shadow-lg hover:opacity-95 active:scale-95 transition-all duration-150 flex items-center justify-center gap-2 custom-glow-primary" href="#activities">
+<span>Start Exploring 🚀</span>
+</a>
+<a class="w-full sm:w-auto px-7 py-4 rounded-full bg-surface-container-lowest text-secondary font-label-lg shadow-sm border border-secondary-fixed hover:bg-surface-container-low active:scale-95 transition-all duration-150 flex items-center justify-center gap-2" href="#coloring">
+<span>Explore 200+ Activities 🎨</span>
+</a>
+</div>
+<!-- 3-Stat Trust Strip (beblessed.io rhythm) -->
+<div class="grid grid-cols-1 sm:grid-cols-3 gap-3 w-full max-w-2xl bg-surface-container-lowest/80 p-2.5 rounded-2xl sm:rounded-full shadow-sm border border-surface-container mb-12">
+<div class="flex items-center justify-center gap-2 py-2 px-3">
+<span class="material-symbols-outlined text-secondary text-lg">verified_user</span>
+<span class="text-xs font-label-md text-on-surface">100% Ad-Free &amp; COPPA Safe</span>
+</div>
+<div class="flex items-center justify-center gap-2 py-2 px-3 border-t sm:border-t-0 sm:border-x border-surface-container">
+<span class="material-symbols-outlined text-primary text-lg">diversity_1</span>
+<span class="text-xs font-label-md text-on-surface">50,000+ Young Explorers</span>
+</div>
+<div class="flex items-center justify-center gap-2 py-2 px-3">
+<span class="material-symbols-outlined text-tertiary-container text-lg fill-icon" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="text-xs font-label-md text-on-surface">4.9/5 ★ Loved by Parents</span>
+</div>
+</div>
+</div>
+<!-- Hero Media Container -->
+<div class="relative max-w-4xl mx-auto rounded-3xl overflow-hidden shadow-2xl border-4 border-white bg-surface-container-lowest group">
+<img alt="WonderKids vibrant world illustration showing happy diverse children reading books, painting art, and assembling colorful puzzle pieces under a sunny sky" class="w-full h-auto object-cover max-h-[540px] transform group-hover:scale-[1.01] transition-transform duration-500 ease-out" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAMs8Oh3eu3Jn47oxJGNQCAwNt8ip9SMsbnEzpwsM7Q4zNJPU_JoCzVXmfuZ-1a_2D2s4r_oji0z0D3_OipogOeIcnhyvTAvs5h0l0RC5dejUkxXxUdpfkLTTdoIaEAhIM4pL-I3lqJESDjttv-C9pcmFs7_h-VGH4U9yicHXYxxU1qTeBJdLa4rg1Hpk6ds3533Uk4YTyWGarjhmEYM2EnU2npzHIxkVLcdhvewHioZR-9TJ0aCuS0VQ"/>
+<!-- Floating Live Badges over Hero Image -->
+<div class="absolute top-5 left-5 bg-surface-container-lowest/90 backdrop-blur-md px-4 py-2 rounded-full shadow-lg border border-white flex items-center gap-2 animate-bounce" style="animation-duration: 3s;">
+<span class="text-base">🌟</span>
+<span class="text-xs font-label-md text-on-surface font-bold">+150 Stars Earned Today!</span>
+</div>
+<div class="absolute bottom-5 left-5 bg-surface-container-lowest/95 backdrop-blur-md px-4 py-2.5 rounded-2xl sm:rounded-full shadow-lg border border-white flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-secondary-fixed flex items-center justify-center text-sm">
+            👧
+          </div>
+<div class="flex flex-col">
+<span class="text-xs font-label-md font-bold text-on-surface">Mia completed ‘Space Odyssey’</span>
+<span class="text-[10px] font-body-sm text-secondary font-semibold">Just 3 minutes ago • +40 XP</span>
+</div>
+</div>
+<!-- Sound toggle pill button -->
+<button class="absolute bottom-5 right-5 bg-inverse-surface/80 hover:bg-inverse-surface text-white p-3 rounded-full backdrop-blur-md shadow-md transition-transform active:scale-90 flex items-center justify-center" id="soundBtn" title="Toggle Nature Sounds" aria-pressed="false">
+<span class="material-symbols-outlined text-lg" id="soundIcon">volume_up</span>
+</button>
+</div>
+</div>
+</section>
+<!-- ==================== 3. "WHAT'S FUN TODAY?" (CATEGORY BENTO GRID) ==================== -->
+<section class="py-16 bg-surface-container-low/50" id="activities">
+<div class="max-w-[1240px] mx-auto px-6">
+<div class="flex flex-col items-center text-center mb-12">
+<span class="text-label-sm font-label-sm font-bold text-secondary tracking-wider uppercase px-3.5 py-1 rounded-full bg-secondary-fixed/50 mb-2">
+          ENDLESS DISCOVERY
+        </span>
+<h2 class="text-headline-lg-mobile md:text-headline-lg font-headline-lg text-on-surface">
+          Playful Learning Engineered for Curious Minds
+        </h2>
+<p class="text-body-md font-body-md text-on-surface-variant max-w-xl mt-2">
+          Bite-sized creative and cognitive modules designed with pediatric educators for joyful development.
+        </p>
+</div>
+<!-- 4 High-Aspect Activity Category Cards -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+<!-- Card 1: Coloring Studio -->
+<div class="tactile-card rounded-3xl p-6 flex flex-col justify-between custom-pill-shadow hover:translate-y-[-4px] transition-all duration-200 border-t-4 border-t-primary-container">
+<div>
+<div class="w-14 h-14 rounded-2xl bg-primary-fixed flex items-center justify-center text-primary text-2xl mb-4 shadow-inner">
+              🎨
+            </div>
+<div class="flex items-center justify-between mb-1">
+<span class="text-label-sm font-label-sm text-primary font-bold">CREATIVE ART</span>
+<span class="text-xs bg-surface-container px-2 py-0.5 rounded-full text-on-surface-variant font-bold">80+ Pages</span>
+</div>
+<h3 class="text-headline-sm font-headline-sm text-on-surface mb-2">Coloring Studio</h3>
+<p class="text-body-sm font-body-sm text-on-surface-variant mb-6">
+              Paint, doodle, and bring cute magical worlds to life with friendly paint-bucket and brush tools.
+            </p>
+</div>
+<a class="w-full py-2.5 rounded-full bg-primary-fixed text-primary font-label-md text-center hover:bg-primary-container hover:text-white transition-colors duration-150 flex items-center justify-center gap-1" href="#coloring">
+<span>Play Now</span>
+<span class="material-symbols-outlined text-sm">arrow_forward</span>
+</a>
+</div>
+<!-- Card 2: Story Island -->
+<div class="tactile-card rounded-3xl p-6 flex flex-col justify-between custom-pill-shadow hover:translate-y-[-4px] transition-all duration-200 border-t-4 border-t-secondary">
+<div>
+<div class="w-14 h-14 rounded-2xl bg-secondary-fixed flex items-center justify-center text-secondary text-2xl mb-4 shadow-inner">
+              📚
+            </div>
+<div class="flex items-center justify-between mb-1">
+<span class="text-label-sm font-label-sm text-secondary font-bold">LITERACY</span>
+<span class="text-xs bg-surface-container px-2 py-0.5 rounded-full text-on-surface-variant font-bold">65+ Books</span>
+</div>
+<h3 class="text-headline-sm font-headline-sm text-on-surface mb-2">Story Island</h3>
+<p class="text-body-sm font-body-sm text-on-surface-variant mb-6">
+              Immersive animated read-alongs with read-to-me audio, highlighted vocabulary, and tap surprises.
+            </p>
+</div>
+<a class="w-full py-2.5 rounded-full bg-secondary-fixed text-secondary font-label-md text-center hover:bg-secondary hover:text-white transition-colors duration-150 flex items-center justify-center gap-1" href="#stories">
+<span>Read Stories</span>
+<span class="material-symbols-outlined text-sm">arrow_forward</span>
+</a>
+</div>
+<!-- Card 3: Games Arcade -->
+<div class="tactile-card rounded-3xl p-6 flex flex-col justify-between custom-pill-shadow hover:translate-y-[-4px] transition-all duration-200 border-t-4 border-t-tertiary-container">
+<div>
+<div class="w-14 h-14 rounded-2xl bg-tertiary-fixed flex items-center justify-center text-tertiary text-2xl mb-4 shadow-inner">
+              🎮
+            </div>
+<div class="flex items-center justify-between mb-1">
+<span class="text-label-sm font-label-sm text-tertiary font-bold">LOGIC &amp; MATH</span>
+<span class="text-xs bg-surface-container px-2 py-0.5 rounded-full text-on-surface-variant font-bold">45+ Games</span>
+</div>
+<h3 class="text-headline-sm font-headline-sm text-on-surface mb-2">Games Arcade</h3>
+<p class="text-body-sm font-body-sm text-on-surface-variant mb-6">
+              Brain-boosting puzzles, memory quests, counting challenges, and gentle spatial puzzles.
+            </p>
+</div>
+<a class="w-full py-2.5 rounded-full bg-tertiary-fixed text-tertiary font-label-md text-center hover:bg-tertiary-container hover:text-white transition-colors duration-150 flex items-center justify-center gap-1" href="#games">
+<span>Play Quests</span>
+<span class="material-symbols-outlined text-sm">arrow_forward</span>
+</a>
+</div>
+<!-- Card 4: Wonder Labs -->
+<div class="tactile-card rounded-3xl p-6 flex flex-col justify-between custom-pill-shadow hover:translate-y-[-4px] transition-all duration-200 border-t-4 border-t-secondary-container">
+<div>
+<div class="w-14 h-14 rounded-2xl bg-surface-container flex items-center justify-center text-primary text-2xl mb-4 shadow-inner">
+              🔬
+            </div>
+<div class="flex items-center justify-between mb-1">
+<span class="text-label-sm font-label-sm text-primary font-bold">SCIENCE &amp; NATURE</span>
+<span class="text-xs bg-surface-container px-2 py-0.5 rounded-full text-on-surface-variant font-bold">30+ Quests</span>
+</div>
+<h3 class="text-headline-sm font-headline-sm text-on-surface mb-2">Wonder Labs</h3>
+<p class="text-body-sm font-body-sm text-on-surface-variant mb-6">
+              Interactive science sparks, solar system tours, wildlife tracking, and backyard ecology mysteries.
+            </p>
+</div>
+<a class="w-full py-2.5 rounded-full bg-surface-container text-primary font-label-md text-center hover:bg-primary-container hover:text-white transition-colors duration-150 flex items-center justify-center gap-1" href="#learn">
+<span>Explore Labs</span>
+<span class="material-symbols-outlined text-sm">arrow_forward</span>
+</a>
+</div>
+</div>
+</div>
+</section>
+<!-- ==================== 4. INTERACTIVE DEMO 1: COLORING BOOK PREVIEW ==================== -->
+<section class="py-16" id="coloring">
+<div class="max-w-[1240px] mx-auto px-6">
+<div class="flex flex-col sm:flex-row sm:items-end justify-between mb-8 gap-4">
+<div>
+<span class="text-label-sm font-label-sm font-bold text-primary tracking-wider uppercase px-3 py-1 rounded-full bg-primary-fixed mb-2 inline-block">
+            HANDS-ON CREATIVITY
+          </span>
+<h2 class="text-headline-lg-mobile md:text-headline-lg font-headline-lg text-on-surface">
+            Let's Get Creative! Coloring Studio
+          </h2>
+<p class="text-body-md font-body-md text-on-surface-variant">
+            Tap colors, pick brushes, and shade your favorite characters. 100% mess-free!
+          </p>
+</div>
+<!-- Filter category pills -->
+<div class="flex flex-wrap gap-2">
+<button class="px-4 py-1.5 rounded-full bg-primary-container text-white font-label-sm">All</button>
+<button class="px-4 py-1.5 rounded-full bg-surface-container text-on-surface-variant hover:bg-surface-container-high font-label-sm">Dinosaurs</button>
+<button class="px-4 py-1.5 rounded-full bg-surface-container text-on-surface-variant hover:bg-surface-container-high font-label-sm">Deep Space</button>
+<button class="px-4 py-1.5 rounded-full bg-surface-container text-on-surface-variant hover:bg-surface-container-high font-label-sm">Animals</button>
+</div>
+</div>
+<!-- Split Studio Layout -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+<!-- Left: Functional Canvas Interactive Toy -->
+<div class="lg:col-span-8 tactile-card rounded-3xl p-6 custom-floating-shadow">
+<div class="flex flex-wrap items-center justify-between pb-4 mb-4 border-b border-surface-container gap-3">
+<div class="flex items-center gap-2">
+<span class="text-lg">🦕</span>
+<span class="font-headline-sm text-headline-sm text-on-surface">Friendly Brontosaurus in the Valley</span>
+</div>
+<div class="flex items-center gap-2">
+<button class="p-2 rounded-xl bg-surface-container hover:bg-surface-container-high text-on-surface-variant text-sm flex items-center gap-1" id="undoBtn" title="Undo">
+<span class="material-symbols-outlined text-sm">undo</span>
+<span class="text-xs font-label-sm hidden sm:inline">Undo</span>
+</button>
+<button class="p-2 rounded-xl bg-surface-container hover:bg-surface-container-high text-on-surface-variant text-sm flex items-center gap-1" id="clearBtn" title="Reset Canvas">
+<span class="material-symbols-outlined text-sm">restart_alt</span>
+<span class="text-xs font-label-sm hidden sm:inline">Reset</span>
+</button>
+<button class="px-4 py-2 rounded-full bg-primary-container text-white font-label-sm flex items-center gap-1 shadow-sm active:scale-95 transition-transform" id="saveArtBtn">
+<span class="material-symbols-outlined text-sm">download</span>
+<span>Save Artwork</span>
+</button>
+</div>
+</div>
+<!-- The Canvas Drawing Area -->
+<div class="relative w-full h-[360px] sm:h-[400px] bg-amber-50/40 rounded-2xl border-2 border-dashed border-outline-variant/60 overflow-hidden flex items-center justify-center cursor-crosshair">
+<!-- Background Outline Template for Dino -->
+<svg class="absolute inset-0 w-full h-full pointer-events-none p-6 opacity-30 stroke-on-surface fill-none" preserveaspectratio="xMidYMid meet" viewbox="0 0 500 350">
+<path d="M 120 280 C 100 240, 110 180, 150 160 C 180 140, 220 150, 260 170 C 300 130, 320 80, 350 70 C 370 65, 390 80, 395 105 C 400 130, 360 170, 360 210 C 420 220, 470 250, 480 290" stroke-linecap="round" stroke-width="6"></path>
+<circle cx="375" cy="85" fill="#181a2e" r="5"></circle>
+<path d="M 140 280 L 140 330 M 170 280 L 170 330 M 310 270 L 310 330 M 340 260 L 340 330" stroke-linecap="round" stroke-width="8"></path>
+<!-- Mini Sun & Clouds -->
+<circle cx="80" cy="80" r="30" stroke-width="4"></circle>
+<path d="M 210 60 C 230 40, 270 40, 290 60 C 300 80, 280 100, 260 100 L 210 100 Z" stroke-width="4"></path>
+</svg>
+<!-- HTML5 Interactive Scratchpad Canvas -->
+<canvas class="w-full h-full relative z-10 touch-none" id="paintCanvas"></canvas>
+<div class="absolute bottom-4 left-4 z-20 bg-surface-container-lowest/90 px-3 py-1.5 rounded-full text-xs font-label-sm text-on-surface shadow pointer-events-none flex items-center gap-1.5" id="paintHint">
+<span>✨ Click &amp; drag on canvas to paint!</span>
+</div>
+</div>
+<!-- Color Palette Picker (10 cheerful child-safe pigments) -->
+<div class="mt-5 flex flex-wrap items-center justify-between gap-4">
+<div class="flex items-center gap-2">
+<span class="text-xs font-label-md text-on-surface-variant font-bold mr-1">Colors:</span>
+<div class="flex items-center gap-1.5 flex-wrap" id="colorPalette">
+<button class="color-chip w-8 h-8 rounded-full border-2 border-white shadow-sm ring-2 ring-primary transition-transform scale-110" data-color="#FF6B4A" style="background-color: #FF6B4A;" title="Coral Orange"></button>
+<button class="color-chip w-8 h-8 rounded-full border-2 border-white shadow-sm hover:scale-105 transition-transform" data-color="#fabc3f" style="background-color: #fabc3f;" title="Sunshine Yellow"></button>
+<button class="color-chip w-8 h-8 rounded-full border-2 border-white shadow-sm hover:scale-105 transition-transform" data-color="#4EBA87" style="background-color: #4EBA87;" title="Mint Forest"></button>
+<button class="color-chip w-8 h-8 rounded-full border-2 border-white shadow-sm hover:scale-105 transition-transform" data-color="#4EA8DE" style="background-color: #4EA8DE;" title="Sky Blue"></button>
+<button class="color-chip w-8 h-8 rounded-full border-2 border-white shadow-sm hover:scale-105 transition-transform" data-color="#9D4EDD" style="background-color: #9D4EDD;" title="Magic Violet"></button>
+<button class="color-chip w-8 h-8 rounded-full border-2 border-white shadow-sm hover:scale-105 transition-transform" data-color="#FF758F" style="background-color: #FF758F;" title="Sweet Berry"></button>
+<button class="color-chip w-8 h-8 rounded-full border-2 border-white shadow-sm hover:scale-105 transition-transform" data-color="#181a2e" style="background-color: #181a2e;" title="Night Charcoal"></button>
+</div>
+</div>
+<!-- Brush Size Picker -->
+<div class="flex items-center gap-2">
+<span class="text-xs font-label-md text-on-surface-variant font-bold">Brush:</span>
+<button class="brush-size-btn px-2.5 py-1 rounded-full bg-surface-container text-xs font-bold" data-size="4">Small</button>
+<button class="brush-size-btn px-2.5 py-1 rounded-full bg-primary-container text-white text-xs font-bold" data-size="12">Medium</button>
+<button class="brush-size-btn px-2.5 py-1 rounded-full bg-surface-container text-xs font-bold" data-size="24">Big</button>
+</div>
+</div>
+</div>
+<!-- Right: 3 Coloring Sheet Choices -->
+<div class="lg:col-span-4 flex flex-col gap-4">
+<span class="text-xs font-label-md font-bold text-on-surface-variant uppercase tracking-wider">More Coloring Sheets</span>
+<!-- Choice 1: Active Dino -->
+<div class="tactile-card rounded-2xl p-4 flex items-center gap-4 border-2 border-primary-container/40 bg-surface-container-low cursor-pointer">
+<div class="w-16 h-16 rounded-xl bg-primary-fixed flex items-center justify-center text-3xl">
+              🦕
+            </div>
+<div class="flex-1">
+<div class="flex items-center gap-1">
+<span class="text-xs font-bold text-primary font-label-sm">NOW PLAYING</span>
+</div>
+<h4 class="font-headline-sm text-sm font-bold text-on-surface">T-Rex at the Volcano</h4>
+<span class="text-xs text-on-surface-variant font-body-sm">Ages 4–7 • 12 Colors</span>
+</div>
+</div>
+<!-- Choice 2: Space Kitty -->
+<div class="tactile-card rounded-2xl p-4 flex items-center gap-4 hover:border-secondary transition-colors cursor-pointer group">
+<div class="w-16 h-16 rounded-xl bg-secondary-fixed flex items-center justify-center text-3xl group-hover:scale-110 transition-transform">
+              🚀
+            </div>
+<div class="flex-1">
+<h4 class="font-headline-sm text-sm font-bold text-on-surface">Cosmic Astronaut Kitty</h4>
+<span class="text-xs text-on-surface-variant font-body-sm">Ages 6–10 • Glowing Stars</span>
+</div>
+<button class="px-3 py-1.5 rounded-full bg-surface-container text-secondary text-xs font-bold hover:bg-secondary hover:text-white transition-colors">
+              Color
+            </button>
+</div>
+<!-- Choice 3: Dolphin Reef -->
+<div class="tactile-card rounded-2xl p-4 flex items-center gap-4 hover:border-tertiary-container transition-colors cursor-pointer group">
+<div class="w-16 h-16 rounded-xl bg-tertiary-fixed flex items-center justify-center text-3xl group-hover:scale-110 transition-transform">
+              🐬
+            </div>
+<div class="flex-1">
+<h4 class="font-headline-sm text-sm font-bold text-on-surface">Friendly Dolphin Reef</h4>
+<span class="text-xs text-on-surface-variant font-body-sm">Ages 5–9 • Under the Sea</span>
+</div>
+<button class="px-3 py-1.5 rounded-full bg-surface-container text-tertiary text-xs font-bold hover:bg-tertiary-container hover:text-white transition-colors">
+              Color
+            </button>
+</div>
+<!-- Reward callout banner -->
+<div class="rounded-2xl p-4 bg-tertiary-fixed/40 border border-tertiary-fixed flex items-center gap-3">
+<span class="material-symbols-outlined text-2xl text-tertiary-container fill-icon" style="font-variation-settings: 'FILL' 1;">military_tech</span>
+<div class="text-xs text-on-surface">
+<span class="font-bold">Coloring Quest:</span> Complete 2 drawings today to unlock the <span class="font-bold text-tertiary">Rainbow Brush badge</span>!
+            </div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- ==================== 5. TODAY'S ADVENTURE & REWARDS (HOW IT WORKS RHYTHM) ==================== -->
+<section class="py-16 bg-surface-container-low/40">
+<div class="max-w-[1240px] mx-auto px-6">
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+<!-- Left 7 Cols: 4-Step Daily Learning Journey (beblessed.io step flow) -->
+<div class="lg:col-span-7">
+<span class="text-label-sm font-label-sm font-bold text-secondary tracking-wider uppercase px-3 py-1 rounded-full bg-secondary-fixed mb-2 inline-block">
+            DAILY DISCOVERY PATHWAY
+          </span>
+<h2 class="text-headline-lg-mobile md:text-headline-lg font-headline-lg text-on-surface mb-3">
+            Today's Wonder Mission
+          </h2>
+<p class="text-body-md font-body-md text-on-surface-variant mb-8">
+            Complete daily quests across reading, math, and creativity. Earn badges, hatch stars, and build steady learning habits.
+          </p>
+<!-- 4 Steps Workflow -->
+<div class="space-y-4">
+<!-- Step 1 (Done) -->
+<div class="tactile-card rounded-2xl p-4 flex items-center gap-4 shadow-sm border-l-4 border-l-emerald-500">
+<div class="w-10 h-10 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold text-lg">
+                ✓
+              </div>
+<div class="flex-1">
+<div class="flex items-center justify-between">
+<h4 class="font-headline-sm text-base text-on-surface font-bold">Step 1: Color a Dinosaur in Art Studio</h4>
+<span class="text-xs font-label-sm text-emerald-700 font-bold bg-emerald-50 px-2.5 py-0.5 rounded-full">Completed! +25 ⭐</span>
+</div>
+<p class="text-xs text-on-surface-variant font-body-sm mt-0.5">Leo finished shading the Brontosaurus.</p>
+</div>
+</div>
+<!-- Step 2 (In Progress) -->
+<div class="tactile-card rounded-2xl p-4 flex items-center gap-4 shadow-sm border-l-4 border-l-primary-container bg-surface-container-lowest">
+<div class="w-10 h-10 rounded-full bg-primary-fixed text-primary font-bold flex items-center justify-center text-sm">
+                2
+              </div>
+<div class="flex-1">
+<div class="flex items-center justify-between mb-1">
+<h4 class="font-headline-sm text-base text-on-surface font-bold">Step 2: Read Chapter 2 of ‘The Little Explorer’</h4>
+<span class="text-xs font-label-sm text-primary font-bold">60% Done</span>
+</div>
+<!-- Progress bar -->
+<div class="w-full bg-surface-container rounded-full h-2 overflow-hidden">
+<div class="bg-primary-container h-full rounded-full transition-all duration-300" style="width: 60%"></div>
+</div>
+</div>
+<a class="px-3.5 py-1.5 rounded-full bg-primary-fixed text-primary font-label-sm hover:bg-primary-container hover:text-white transition-colors" href="#stories">
+                Resume
+              </a>
+</div>
+<!-- Step 3 (Ready) -->
+<div class="tactile-card rounded-2xl p-4 flex items-center gap-4 shadow-sm border-l-4 border-l-secondary">
+<div class="w-10 h-10 rounded-full bg-secondary-fixed text-secondary font-bold flex items-center justify-center text-sm">
+                3
+              </div>
+<div class="flex-1">
+<div class="flex items-center justify-between">
+<h4 class="font-headline-sm text-base text-on-surface font-bold">Step 3: Solve the Cosmic Shape Puzzle</h4>
+<span class="text-xs font-label-sm text-secondary font-bold bg-secondary-fixed/50 px-2 py-0.5 rounded-full">Up Next</span>
+</div>
+<p class="text-xs text-on-surface-variant font-body-sm mt-0.5">Brain puzzle challenge (+35 Stars)</p>
+</div>
+<a class="px-3.5 py-1.5 rounded-full bg-secondary-fixed text-secondary font-label-sm hover:bg-secondary hover:text-white transition-colors" href="#games">
+                Start
+              </a>
+</div>
+<!-- Step 4 (Locked) -->
+<div class="tactile-card rounded-2xl p-4 flex items-center gap-4 shadow-sm opacity-60 bg-surface-container-low">
+<div class="w-10 h-10 rounded-full bg-surface-container-highest text-on-surface-variant font-bold flex items-center justify-center text-sm">
+<span class="material-symbols-outlined text-base">lock</span>
+</div>
+<div class="flex-1">
+<div class="flex items-center justify-between">
+<h4 class="font-headline-sm text-base text-on-surface font-semibold">Step 4: Ace the Daily Math Mini-Quest</h4>
+<span class="text-xs font-label-sm text-on-surface-variant">Unlocks after Step 3</span>
+</div>
+<p class="text-xs text-on-surface-variant font-body-sm mt-0.5">Answer 5 space addition problems.</p>
+</div>
+</div>
+</div>
+<!-- Daily Chest Summary Action -->
+<div class="mt-6 flex flex-col sm:flex-row items-center justify-between p-4 rounded-2xl bg-surface-container border border-surface-container-highest gap-4">
+<div class="flex items-center gap-3">
+<div class="text-3xl animate-pulse">🎁</div>
+<div>
+<span class="font-bold text-sm text-on-surface block"><%= progress.questsCompleted %> of <%= progress.totalQuests %> Daily Quests Completed! (<%= Math.round((progress.questsCompleted / progress.totalQuests) * 100) %>%)</span>
+<span class="text-xs text-on-surface-variant">Finish Step 2 to open the Grand Mystery Star Chest!</span>
+</div>
+</div>
+<button class="px-5 py-2.5 rounded-full bg-tertiary-container text-white font-label-md font-bold hover:opacity-90 active:scale-95 transition-all shadow-sm flex items-center gap-1.5 whitespace-nowrap">
+<span>Claim Mystery Chest 🎁</span>
+</button>
+</div>
+</div>
+<!-- Right 5 Cols: Featured WonderKid Spotlight Card -->
+<div class="lg:col-span-5">
+<div class="tactile-card rounded-3xl p-8 custom-floating-shadow relative overflow-hidden bg-gradient-to-b from-white to-surface-container-low border-2 border-secondary-fixed">
+<!-- Background decorative shimmer -->
+<div class="absolute -top-10 -right-10 w-40 h-40 bg-tertiary-fixed/50 rounded-full blur-2xl pointer-events-none"></div>
+<div class="flex items-center justify-between mb-6">
+<span class="text-xs font-label-sm uppercase tracking-wider text-tertiary font-bold bg-tertiary-fixed px-3 py-1 rounded-full">
+                HALL OF EXPLORERS
+              </span>
+<div class="flex items-center gap-1 text-tertiary-container">
+<span class="material-symbols-outlined text-sm fill-icon" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-sm fill-icon" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-sm fill-icon" style="font-variation-settings: 'FILL' 1;">star</span>
+</div>
+</div>
+<!-- Avatar & Details -->
+<div class="flex items-center gap-4 mb-6">
+<div class="w-18 h-18 p-1 rounded-full bg-gradient-to-tr from-primary-container to-tertiary-container">
+<div class="w-16 h-16 rounded-full bg-secondary-fixed flex items-center justify-center text-3xl shadow-inner">
+                  👧🏽
+                </div>
+</div>
+<div>
+<h3 class="text-headline-md font-headline-md text-on-surface">Maya Patel</h3>
+<span class="text-xs font-label-md text-secondary font-bold block">Age 7 • Junior Astronomer</span>
+<span class="text-[11px] text-on-surface-variant font-body-sm">Joined WonderKids 4 months ago</span>
+</div>
+</div>
+<!-- Milestone Badge Card -->
+<div class="rounded-2xl p-4 bg-surface-container-lowest border border-surface-container mb-6 shadow-sm">
+<div class="flex items-center gap-3">
+<div class="w-12 h-12 rounded-xl bg-tertiary-fixed flex items-center justify-center text-2xl">
+                  🚀
+                </div>
+<div class="flex-1">
+<span class="text-[10px] uppercase font-bold text-tertiary tracking-wider block">Recent Achievement</span>
+<h4 class="font-headline-sm text-sm font-bold text-on-surface">Galaxy Master Badge</h4>
+<span class="text-xs text-on-surface-variant">Completed 15 astronomy space labs</span>
+</div>
+</div>
+</div>
+<!-- XP Level Bar -->
+<div class="mb-6">
+<div class="flex items-center justify-between text-xs font-label-sm mb-1.5">
+<span class="text-on-surface font-bold">Level <%= progress.level %> <%= progress.levelTitle %></span>
+<span class="text-primary font-bold"><%= progress.xp.toLocaleString('en-US') %> / <%= progress.xpGoal.toLocaleString('en-US') %> XP</span>
+</div>
+<div class="w-full bg-surface-container rounded-full h-3 overflow-hidden p-0.5">
+<div class="bg-gradient-to-r from-primary-container to-tertiary-container h-full rounded-full" style="width: <%= Math.round((progress.xp / progress.xpGoal) * 100) %>%;"></div>
+</div>
+<span class="text-[11px] text-on-surface-variant font-body-sm mt-1 block">Only <%= (progress.xpGoal - progress.xp).toLocaleString('en-US') %> XP until Level 5 Master badge unlock!</span>
+</div>
+<div class="pt-4 border-t border-surface-container text-center">
+<span class="text-xs text-on-surface-variant font-body-sm italic">
+                “Maya now asks to do math challenges before dinner instead of watching TV!” — Sunita, Maya’s Mom
+              </span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- ==================== 6. INTERACTIVE DEMO 2: GAMES ARCADE MINI-QUEST ==================== -->
+<section class="py-16" id="games">
+<div class="max-w-[1240px] mx-auto px-6">
+<div class="text-center max-w-2xl mx-auto mb-10">
+<span class="text-label-sm font-label-sm font-bold text-tertiary tracking-wider uppercase px-3 py-1 rounded-full bg-tertiary-fixed mb-2 inline-block">
+          INTERACTIVE BRAIN PLAY
+        </span>
+<h2 class="text-headline-lg-mobile md:text-headline-lg font-headline-lg text-on-surface">
+          Math Adventure Mini-Quest
+        </h2>
+<p class="text-body-md font-body-md text-on-surface-variant">
+          Tap the correct crystal answer to power Captain Leo’s rocket to the Cosmic Moon!
+        </p>
+</div>
+<!-- Playable Quest Box -->
+<div class="max-w-3xl mx-auto tactile-card rounded-3xl p-6 sm:p-10 custom-floating-shadow border-2 border-surface-container-highest">
+<!-- Header Question Strip -->
+<div class="flex items-center justify-between pb-6 border-b border-surface-container mb-8">
+<div class="flex items-center gap-2">
+<span class="text-2xl">🚀</span>
+<div>
+<span class="text-xs font-label-sm text-secondary font-bold uppercase">Quest #3 of 5</span>
+<h4 class="text-headline-sm font-headline-sm text-on-surface">Captain Leo’s Crystal Count</h4>
+</div>
+</div>
+<div class="flex items-center gap-2 bg-tertiary-fixed/50 px-3 py-1.5 rounded-full">
+<span class="material-symbols-outlined text-sm text-tertiary fill-icon" style="font-variation-settings: 'FILL' 1;">stars</span>
+<span class="text-xs font-bold text-tertiary">+25 Stars</span>
+</div>
+</div>
+<!-- Problem Statement Prompt -->
+<div class="bg-surface-container-low rounded-2xl p-6 text-center mb-8 border border-surface-container">
+<p class="text-headline-sm font-headline-sm text-on-surface mb-3 leading-snug">
+            “If Captain Leo collects <span class="text-primary font-bold">5 Star Crystals</span> and finds <span class="text-secondary font-bold">3 more</span> in the Moon Cave, how many does he have altogether?”
+          </p>
+<div class="flex items-center justify-center gap-2 text-2xl">
+<span>💎 💎 💎 💎 💎</span>
+<span class="font-bold text-on-surface-variant text-lg">+</span>
+<span>💎 💎 💎</span>
+</div>
+</div>
+<!-- Chunky 4 Answer Buttons -->
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6" id="mathAnswers">
+<button class="math-btn p-5 rounded-2xl bg-surface-container-lowest border-2 border-surface-container hover:border-secondary text-2xl font-headline-md font-bold text-on-surface active:scale-95 transition-all shadow-sm flex flex-col items-center justify-center gap-1" data-val="6">
+<span>6</span>
+<span class="text-[10px] font-label-sm text-on-surface-variant font-normal">Crystals</span>
+</button>
+<button class="math-btn p-5 rounded-2xl bg-surface-container-lowest border-2 border-surface-container hover:border-secondary text-2xl font-headline-md font-bold text-on-surface active:scale-95 transition-all shadow-sm flex flex-col items-center justify-center gap-1" data-val="7">
+<span>7</span>
+<span class="text-[10px] font-label-sm text-on-surface-variant font-normal">Crystals</span>
+</button>
+<button class="math-btn p-5 rounded-2xl bg-surface-container-lowest border-2 border-primary-container text-2xl font-headline-md font-bold text-on-surface active:scale-95 transition-all shadow-sm flex flex-col items-center justify-center gap-1" data-val="8">
+<span class="text-primary">8 ⭐</span>
+<span class="text-[10px] font-label-sm text-primary font-normal">Crystals</span>
+</button>
+<button class="math-btn p-5 rounded-2xl bg-surface-container-lowest border-2 border-surface-container hover:border-secondary text-2xl font-headline-md font-bold text-on-surface active:scale-95 transition-all shadow-sm flex flex-col items-center justify-center gap-1" data-val="9">
+<span>9</span>
+<span class="text-[10px] font-label-sm text-on-surface-variant font-normal">Crystals</span>
+</button>
+</div>
+<!-- Feedback Result Banner -->
+<div class="p-4 rounded-2xl bg-emerald-50 border border-emerald-200 flex items-center justify-between" id="mathFeedback">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-emerald-500 text-white flex items-center justify-center text-lg font-bold">
+              ★
+            </div>
+<div>
+<span class="font-bold text-emerald-800 text-sm block">🌟 Hooray, Explorer! You nailed it!</span>
+<span class="text-xs text-emerald-700">5 + 3 = 8 crystals! +25 Stars added to Leo’s backpack.</span>
+</div>
+</div>
+<button class="px-4 py-2 rounded-full bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold shadow active:scale-95 transition-transform">
+            Next Puzzle →
+          </button>
+</div>
+</div>
+</div>
+</section>
+<!-- ==================== 7. STORY READER SPOTLIGHT ("STORY TIME") ==================== -->
+<section class="py-16 bg-surface-container-low/40" id="stories">
+<div class="max-w-[1240px] mx-auto px-6">
+<div class="flex flex-col sm:flex-row sm:items-end justify-between mb-10 gap-4">
+<div>
+<span class="text-label-sm font-label-sm font-bold text-secondary tracking-wider uppercase px-3 py-1 rounded-full bg-secondary-fixed mb-2 inline-block">
+            STORYTIME CORNER
+          </span>
+<h2 class="text-headline-lg-mobile md:text-headline-lg font-headline-lg text-on-surface">
+            The Whispering Forest &amp; The Lost Fox
+          </h2>
+<p class="text-body-md font-body-md text-on-surface-variant">
+            Illustrated, narrated interactive books crafted for phonics fluency and moral discovery.
+          </p>
+</div>
+<div class="flex items-center gap-2">
+<button class="px-4 py-2 rounded-full bg-surface-container-lowest border border-surface-container-highest text-xs font-bold text-on-surface hover:bg-surface-container flex items-center gap-1.5">
+<span class="material-symbols-outlined text-sm">bookmark</span>
+<span>Bookmark Page</span>
+</button>
+<button class="px-4 py-2 rounded-full bg-secondary text-white text-xs font-bold hover:opacity-90 flex items-center gap-1.5">
+<span class="material-symbols-outlined text-sm">library_books</span>
+<span>Browse 65+ Stories</span>
+</button>
+</div>
+</div>
+<!-- Story Reader Tablet UI -->
+<div class="tactile-card rounded-3xl p-6 sm:p-10 custom-floating-shadow max-w-4xl mx-auto border-4 border-surface-container-lowest bg-surface-container-lowest">
+<!-- Story Top Control Bar -->
+<div class="flex items-center justify-between pb-6 border-b border-surface-container mb-6">
+<div class="flex items-center gap-3">
+<span class="text-2xl">🦊</span>
+<div>
+<h4 class="font-headline-sm text-base text-on-surface font-bold">Chapter 2: The Path of Glowing Moss</h4>
+<span class="text-xs text-on-surface-variant font-label-sm">Lexile Measure: 320L • Reading Time: 4 mins</span>
+</div>
+</div>
+<span class="text-xs font-label-md font-bold px-3 py-1 rounded-full bg-surface-container text-on-surface">
+            Page 3 of 14
+          </span>
+</div>
+<!-- Story Passage with Highlighted Interactive Vocabulary -->
+<div class="p-6 sm:p-8 rounded-2xl bg-[#FFFDF9] border border-amber-100 shadow-inner mb-6" id="storyPassage">
+<p class="text-headline-sm font-headline-sm text-on-surface leading-relaxed sm:leading-loose">
+            Pip the little ginger fox stepped softly onto the carpet of velvet pine needles. Overhead, the ancient oak trees began to 
+            <button class="vocab-sparkle inline-flex items-center px-2 py-0.5 rounded-lg bg-tertiary-fixed text-tertiary font-bold text-base hover:scale-105 transition-transform" title="Tap to hear pronunciation &amp; definition">
+<span>whisper</span>
+<span class="material-symbols-outlined text-xs ml-0.5 fill-icon" style="font-variation-settings: 'FILL' 1;">volume_up</span>
+</button> 
+            secrets in the gentle twilight breeze. In the distance, a miniature constellation of friendly fireflies danced, lighting a glowing path straight toward the enchanted waterfall.
+          </p>
+</div>
+<!-- Audio Player & Interaction Bar -->
+<div class="flex flex-col sm:flex-row items-center justify-between p-4 rounded-2xl bg-surface-container-low gap-4 border border-surface-container">
+<!-- Play / Pause Audio Narrator -->
+<div class="flex items-center gap-3 w-full sm:w-auto">
+<button class="w-12 h-12 rounded-full bg-primary-container text-white flex items-center justify-center shadow hover:opacity-90 active:scale-95 transition-transform" id="narrationBtn" aria-pressed="false">
+<span class="material-symbols-outlined text-2xl fill-icon" style="font-variation-settings: 'FILL' 1;">play_arrow</span>
+</button>
+<div class="flex flex-col">
+<span class="text-xs font-bold font-label-md text-on-surface">“Read to Me” Voice Narration</span>
+<span class="text-[11px] text-on-surface-variant">Narrated warmly by Miss Clara • English (US)</span>
+</div>
+</div>
+<!-- Page Navigation Arrows -->
+<div class="flex items-center gap-3 w-full sm:w-auto justify-end">
+<button class="px-4 py-2 rounded-full bg-surface-container-lowest border border-surface-container text-xs font-bold text-on-surface hover:bg-surface-container flex items-center gap-1 active:scale-95 transition-transform">
+<span class="material-symbols-outlined text-sm">arrow_back</span>
+<span>Prev Page</span>
+</button>
+<button class="px-5 py-2 rounded-full bg-primary-container text-white text-xs font-bold hover:opacity-90 flex items-center gap-1 active:scale-95 transition-transform shadow-sm">
+<span>Next Page</span>
+<span class="material-symbols-outlined text-sm">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</section>
+<%- include('partials/parent-zone') %>
+<!-- ==================== 9. JOIN THE WONDERKIDS CLUB (BOTTOM CTA) ==================== -->
+<section class="py-16 bg-background">
+<div class="max-w-[1240px] mx-auto px-6">
+<div class="rounded-3xl p-8 sm:p-14 bg-gradient-to-r from-primary via-primary-container to-tertiary-container text-white text-center relative overflow-hidden shadow-2xl">
+<!-- Floating festive stars -->
+<div class="absolute top-6 left-8 text-3xl opacity-40 animate-pulse">⭐</div>
+<div class="absolute bottom-6 right-8 text-4xl opacity-40 animate-pulse" style="animation-delay: 1s;">🚀</div>
+<div class="absolute top-10 right-16 text-2xl opacity-30">✨</div>
+<div class="max-w-2xl mx-auto relative z-10">
+<span class="text-xs font-label-sm font-bold uppercase tracking-widest px-3.5 py-1 rounded-full bg-white/20 text-white mb-4 inline-block">
+            START FREE TODAY
+          </span>
+<h2 class="text-headline-lg-mobile md:text-headline-lg font-headline-lg text-white mb-4 leading-tight">
+            Ready to Ignite Your Child’s Imagination and Love for Learning?
+          </h2>
+<p class="text-body-md font-body-md text-white/90 mb-8 max-w-lg mx-auto">
+            Get started in under 30 seconds. 100% free, safe, and ad-free experience. No credit card required.
+          </p>
+<div class="flex flex-wrap items-center justify-center gap-4">
+<a class="px-8 py-4 rounded-full bg-white text-primary font-label-lg font-bold shadow-lg hover:bg-surface-container-low active:scale-95 transition-all duration-150" href="#activities">
+              Create Free Child Account ⭐
+            </a>
+<a class="px-7 py-4 rounded-full bg-black/20 hover:bg-black/30 text-white font-label-lg font-bold border border-white/30 active:scale-95 transition-all duration-150" href="/parent-zone">
+              Explore Parent Dashboard
+            </a>
+</div>
+<div class="mt-6 text-xs text-white/80 flex items-center justify-center gap-4 flex-wrap">
+<span>✓ Instant Access to 200+ Games</span>
+<span>✓ Works on Tablets &amp; Desktop</span>
+<span>✓ COPPA Verified Safe</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<%- include('partials/footer') %>
+<script src="/js/canvas.js" defer></script>
+<script src="/js/quiz.js" defer></script>
+<script src="/js/audio.js" defer></script>
+</body></html>

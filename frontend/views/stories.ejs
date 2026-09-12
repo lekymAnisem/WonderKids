@@ -1,0 +1,184 @@
+<%- include('partials/head', { title: title }) %>
+<body class="bg-background text-on-surface antialiased selection:bg-primary-fixed selection:text-on-primary-fixed">
+<%- include('partials/navbar', { progress: progress, activeNav: activeNav }) %>
+
+<section class="relative overflow-hidden pt-8 pb-12 md:pt-14 md:pb-20">
+  <div class="absolute top-10 left-1/2 -translate-x-1/2 w-[700px] h-[300px] bg-secondary-fixed/30 rounded-full blur-3xl pointer-events-none -z-10"></div>
+  <div class="max-w-[1240px] mx-auto px-6">
+    <div class="text-center max-w-3xl mx-auto flex flex-col items-center">
+      <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-secondary-fixed/50 text-secondary font-label-sm mb-5 shadow-sm">
+        <span class="material-symbols-outlined text-sm fill-icon" style="font-variation-settings: 'FILL' 1;">auto_stories</span>
+        <span>Illustrated Story Books</span>
+      </div>
+      <h1 class="text-headline-lg-mobile md:text-display font-headline-lg md:font-display text-on-surface tracking-tight mb-4">
+        Story <span class="text-secondary-container inline-block underline decoration-wavy decoration-secondary-fixed-dim/70 decoration-2">Island</span>
+      </h1>
+      <p class="text-body-md md:text-body-lg font-body-md md:font-body-lg text-on-surface-variant max-w-2xl mb-8">
+        Beautifully illustrated storybooks with read-to-me audio, colorful pictures on every page, and interactive adventures for young readers.
+      </p>
+    </div>
+  </div>
+</section>
+
+<section class="py-12">
+  <div class="max-w-[1240px] mx-auto px-6">
+    <div class="flex flex-col sm:flex-row sm:items-end justify-between mb-10 gap-4">
+      <div>
+        <span class="text-label-sm font-label-sm font-bold text-secondary tracking-wider uppercase px-3 py-1 rounded-full bg-secondary-fixed mb-2 inline-block">
+          STORYTIME CORNER
+        </span>
+        <h2 class="text-headline-lg-mobile md:text-headline-lg font-headline-lg text-on-surface">
+          Pick a Storybook to Read
+        </h2>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
+      <% stories.forEach(function (s, i) { %>
+      <a class="group block" href="/stories/<%= s.id %>">
+        <div class="storybook-card relative">
+          <!-- Book shadow -->
+          <div class="absolute -inset-1 bg-black/10 rounded-2xl blur-md group-hover:blur-lg transition-all duration-300 -z-10 translate-y-2 group-hover:translate-y-3"></div>
+          <!-- Book body -->
+          <div class="relative bg-white rounded-2xl overflow-hidden border border-gray-200 shadow-lg group-hover:shadow-2xl transition-all duration-300 group-hover:-translate-y-1">
+            <!-- Book spine accent -->
+            <div class="absolute top-0 left-0 w-3 h-full bg-gradient-to-b <%= s.cardGrad %> rounded-l-2xl"></div>
+            <!-- Cover image area -->
+            <div class="relative h-56 overflow-hidden ml-3">
+              <% if (s.coverImage) { %>
+                <img src="<%= s.coverImage %>" alt="<%= s.title %> cover" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy">
+              <% } else { %>
+                <div class="w-full h-full bg-gradient-to-br <%= s.cardGrad %> flex items-center justify-center relative overflow-hidden">
+                  <div class="absolute inset-0 opacity-15 select-none pointer-events-none flex items-center justify-center">
+                    <span class="text-[10rem] transform rotate-12 group-hover:rotate-0 group-hover:scale-110 transition-transform duration-500"><%= s.emoji %></span>
+                  </div>
+                  <span class="text-7xl drop-shadow-lg transform group-hover:scale-110 transition-transform duration-300 relative z-10"><%= s.emoji %></span>
+                </div>
+              <% } %>
+              <!-- Page count badge -->
+              <div class="absolute bottom-2 right-2 bg-black/40 backdrop-blur-sm px-2.5 py-1 rounded-full text-white text-[10px] font-label-sm font-bold">
+                <%= s.pages.length %> pages
+              </div>
+              <% if (s.coverImage) { %>
+              <!-- Photo badge -->
+              <div class="absolute top-2 right-2 bg-white/90 backdrop-blur-sm px-2 py-0.5 rounded-full text-[10px] font-label-sm font-bold text-green-700 flex items-center gap-1">
+                <span class="material-symbols-outlined text-xs">photo_camera</span> Illustrated
+              </div>
+              <% } %>
+            </div>
+            <!-- Book content -->
+            <div class="p-5 ml-3">
+              <div class="flex items-center gap-2 mb-2">
+                <% if (i === 0) { %>
+                <span class="text-[10px] font-label-sm text-secondary font-bold bg-secondary-fixed/50 px-2 py-0.5 rounded-full">FEATURED</span>
+                <% } else if (i === 1) { %>
+                <span class="text-[10px] font-label-sm text-primary font-bold bg-primary-fixed/50 px-2 py-0.5 rounded-full">NEW</span>
+                <% } else if (i === 2) { %>
+                <span class="text-[10px] font-label-sm text-tertiary font-bold bg-tertiary-fixed/50 px-2 py-0.5 rounded-full">POPULAR</span>
+                <% } %>
+                <span class="text-[10px] text-on-surface-variant font-body-sm ml-auto flex items-center gap-1">
+                  <span class="material-symbols-outlined text-xs text-secondary fill-icon" style="font-variation-settings: 'FILL' 1;">auto_stories</span>
+                  Read Now
+                </span>
+              </div>
+              <h4 class="font-headline-sm text-base font-bold text-on-surface mb-1 group-hover:text-secondary transition-colors"><%= s.title %></h4>
+              <p class="text-xs text-on-surface-variant font-body-sm mb-3 line-clamp-2"><%= s.summary %></p>
+              <div class="flex items-center justify-between">
+                <span class="text-[10px] font-label-sm text-secondary font-bold">Lexile <%= s.lexile %>L • <%= s.minutes %> min</span>
+                <span class="text-[10px] text-on-surface-variant font-body-sm">⭐ <%= s.rating %></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </a>
+      <% }) %>
+    </div>
+
+    <!-- Featured storybook spotlight -->
+    <% if (stories.length > 0) { %>
+    <% var featured = stories[0]; %>
+    <div class="text-center max-w-2xl mx-auto mb-10">
+      <span class="text-label-sm font-label-sm font-bold text-secondary tracking-wider uppercase px-3 py-1 rounded-full bg-secondary-fixed mb-2 inline-block">
+        READER SPOTLIGHT
+      </span>
+      <h2 class="text-headline-lg-mobile md:text-headline-lg font-headline-lg text-on-surface">
+        <%= featured.title %>
+      </h2>
+      <p class="text-body-md font-body-md text-on-surface-variant">
+        Illustrated, narrated interactive storybooks crafted for reading fluency and imagination.
+      </p>
+    </div>
+
+    <div class="tactile-card rounded-3xl overflow-hidden custom-floating-shadow max-w-4xl mx-auto border-4 border-surface-container-lowest bg-surface-container-lowest">
+      <div class="flex flex-col md:flex-row">
+        <% if (featured.coverImage) { %>
+        <div class="md:w-2/5 h-48 md:h-auto relative overflow-hidden">
+          <img src="<%= featured.coverImage %>" alt="<%= featured.title %>" class="w-full h-full object-cover">
+          <div class="absolute inset-0 bg-gradient-to-r from-transparent to-white/20"></div>
+        </div>
+        <% } %>
+        <div class="flex-1 p-6 sm:p-8">
+          <div class="flex items-center justify-between pb-4 border-b border-surface-container mb-4">
+            <div class="flex items-center gap-3">
+              <span class="text-2xl"><%= featured.emoji %></span>
+              <div>
+                <h4 class="font-headline-sm text-base text-on-surface font-bold"><%= featured.title %></h4>
+                <span class="text-xs text-on-surface-variant font-label-sm">Lexile Measure: <%= featured.lexile %>L • Reading Time: <%= featured.minutes %> mins</span>
+              </div>
+            </div>
+            <span class="text-xs font-label-md font-bold px-3 py-1 rounded-full bg-surface-container text-on-surface"><%= featured.pages.length %> pages</span>
+          </div>
+
+          <div class="p-4 sm:p-6 rounded-2xl bg-[#FFFDF9] border border-amber-100 shadow-inner mb-4">
+            <p class="text-headline-sm font-headline-sm text-on-surface leading-relaxed sm:leading-loose">
+              <%= featured.summary %>
+            </p>
+          </div>
+
+          <div class="flex flex-col sm:flex-row items-center justify-between p-3 rounded-2xl bg-surface-container-low gap-3 border border-surface-container">
+            <div class="flex items-center gap-3 w-full sm:w-auto">
+              <div class="flex flex-col">
+                <span class="text-xs font-bold font-label-md text-on-surface"><%= featured.pages[0].chapter %></span>
+                <span class="text-[11px] text-on-surface-variant">Tap to start reading...</span>
+              </div>
+            </div>
+            <div class="flex items-center gap-3 w-full sm:w-auto justify-end">
+              <a class="px-6 py-2.5 rounded-full bg-secondary text-white text-xs font-bold hover:opacity-90 flex items-center gap-1 active:scale-95 transition-transform shadow-sm" href="/stories/<%= featured.id %>">
+                <span>Read Full Story</span>
+                <span class="material-symbols-outlined text-sm">arrow_forward</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <% } %>
+  </div>
+</section>
+
+<section class="py-16 bg-surface-container-low/40">
+  <div class="max-w-[1240px] mx-auto px-6">
+    <div class="text-center max-w-2xl mx-auto mb-10">
+      <span class="text-label-sm font-label-sm font-bold text-tertiary tracking-wider uppercase px-3 py-1 rounded-full bg-tertiary-fixed mb-2 inline-block">
+        VOCABULARY BUILDER
+      </span>
+      <h2 class="text-headline-lg-mobile md:text-headline-lg font-headline-lg text-on-surface">
+        Words You've Learned
+      </h2>
+    </div>
+    <div class="flex flex-wrap items-center justify-center gap-3 max-w-3xl mx-auto">
+      <span class="px-4 py-2 rounded-full bg-primary-fixed text-primary font-label-sm font-bold hover:scale-105 transition-transform cursor-pointer">caterpillar 🐛</span>
+      <span class="px-4 py-2 rounded-full bg-secondary-fixed text-secondary font-label-sm font-bold hover:scale-105 transition-transform cursor-pointer">cocoon 🦋</span>
+      <span class="px-4 py-2 rounded-full bg-tertiary-fixed text-tertiary font-label-sm font-bold hover:scale-105 transition-transform cursor-pointer">beautiful ✨</span>
+      <span class="px-4 py-2 rounded-full bg-primary-fixed text-primary font-label-sm font-bold hover:scale-105 transition-transform cursor-pointer">whisper 🌿</span>
+      <span class="px-4 py-2 rounded-full bg-secondary-fixed text-secondary font-label-sm font-bold hover:scale-105 transition-transform cursor-pointer">enchanted ⭐</span>
+      <span class="px-4 py-2 rounded-full bg-tertiary-fixed text-tertiary font-label-sm font-bold hover:scale-105 transition-transform cursor-pointer">brave 🐉</span>
+      <span class="px-4 py-2 rounded-full bg-surface-container text-on-surface-variant font-label-sm font-bold hover:scale-105 transition-transform cursor-pointer border border-surface-container-highest">+28 more words</span>
+    </div>
+  </div>
+</section>
+
+<%- include('partials/parent-zone') %>
+<%- include('partials/footer') %>
+<script src="/js/audio.js" defer></script>
+</body></html>

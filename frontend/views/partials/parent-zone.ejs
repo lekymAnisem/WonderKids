@@ -1,0 +1,159 @@
+<!-- ==================== 8. PARENT ZONE & SAFETY PLEDGE ==================== -->
+<section class="py-16 bg-inverse-surface text-inverse-on-surface relative overflow-hidden" id="parent-zone">
+<!-- Subtle glow accents -->
+<div class="absolute top-0 right-0 w-96 h-96 bg-primary/20 rounded-full blur-3xl pointer-events-none"></div>
+<div class="absolute bottom-0 left-0 w-96 h-96 bg-secondary/20 rounded-full blur-3xl pointer-events-none"></div>
+<div class="max-w-[1240px] mx-auto px-6 relative z-10">
+<!-- Top Title Stack -->
+<div class="text-center max-w-2xl mx-auto mb-12">
+<div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/10 text-tertiary-fixed font-label-sm mb-3 backdrop-blur-sm border border-white/10">
+<span class="material-symbols-outlined text-sm fill-icon" style="font-variation-settings: 'FILL' 1;">shield_with_heart</span>
+<span>Parent &amp; Educator Safe Harbor</span>
+</div>
+<h2 class="text-headline-lg-mobile md:text-headline-lg font-headline-lg text-white">
+          Complete Peace of Mind for Mindful Families
+        </h2>
+<p class="text-body-md font-body-md text-surface-dim mt-2">
+          Zero commercial ads, zero social trackers, and total transparent visibility into your child’s growth.
+        </p>
+</div>
+<!-- Grid: Parent Control Snapshot + Safety Standards -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center mb-14">
+<!-- Left 6 Cols: Parent Dashboard Snapshot -->
+<div class="lg:col-span-6 bg-white/5 p-6 sm:p-8 rounded-3xl border border-white/10 backdrop-blur-md">
+<div class="flex items-center justify-between pb-4 border-b border-white/10 mb-6">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary-fixed">dashboard</span>
+<span class="font-headline-sm text-white text-base">Parent Dashboard Preview</span>
+</div>
+<span class="text-xs bg-emerald-500/20 text-emerald-300 px-2.5 py-0.5 rounded-full font-bold">Active Shield</span>
+</div>
+<!-- Screen time & Limits -->
+<div class="grid grid-cols-2 gap-4 mb-6">
+<div class="bg-white/5 p-4 rounded-2xl border border-white/5">
+<span class="text-[11px] text-surface-dim font-label-sm uppercase block">Daily Screen Time</span>
+<span class="text-headline-sm text-white font-bold block mt-1"><%= parent.dailyScreenTime %> / <%= parent.dailyScreenTimeLimit %> mins</span>
+<span class="text-[10px] text-emerald-400">Gentle wind-down enabled</span>
+</div>
+<div class="bg-white/5 p-4 rounded-2xl border border-white/5">
+<span class="text-[11px] text-surface-dim font-label-sm uppercase block">Focus Domain</span>
+<span class="text-headline-sm text-white font-bold block mt-1"><%= parent.focusDomain %></span>
+<span class="text-[10px] text-tertiary-fixed">Top 15% vocabulary rate</span>
+</div>
+</div>
+<!-- Subject Distribution Bar -->
+<div class="space-y-2 mb-6">
+<div class="flex items-center justify-between text-xs text-surface-dim">
+<span>Weekly Learning Distribution</span>
+<span class="font-bold text-white">100% Balanced</span>
+</div>
+<div class="h-3 w-full bg-white/10 rounded-full overflow-hidden flex">
+<div class="bg-primary-container h-full" style="width: <%= parent.distribution.reading %>%" title="Reading (<%= parent.distribution.reading %>%)"></div>
+<div class="bg-secondary-container h-full" style="width: <%= parent.distribution.math %>%" title="Math &amp; Logic (<%= parent.distribution.math %>%)"></div>
+<div class="bg-tertiary-container h-full" style="width: <%= parent.distribution.creativity %>%" title="Creativity (<%= parent.distribution.creativity %>%)"></div>
+</div>
+<div class="flex items-center justify-between text-[11px] text-surface-dim pt-1">
+<span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-primary-container inline-block"></span> Reading <%= parent.distribution.reading %>%</span>
+<span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-secondary-container inline-block"></span> Math <%= parent.distribution.math %>%</span>
+<span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-tertiary-container inline-block"></span> Creative <%= parent.distribution.creativity %>%</span>
+</div>
+</div>
+<!-- Parent Math Pin Gate Demo Button -->
+<button class="w-full py-3 rounded-full bg-white/10 hover:bg-white/15 border border-white/20 text-white text-xs font-label-md font-bold flex items-center justify-center gap-2 transition-colors">
+<span class="material-symbols-outlined text-sm">lock</span>
+<span>Open Parent Pin Gate (Solve: 7 × 8)</span>
+</button>
+</div>
+<!-- Right 6 Cols: Safety Guarantees & Certifications -->
+<div class="lg:col-span-6 space-y-4">
+<div class="p-5 rounded-2xl bg-white/5 border border-white/10 flex items-start gap-4">
+<div class="w-12 h-12 rounded-xl bg-primary-container/20 text-primary-fixed flex items-center justify-center text-xl shrink-0">
+              🛡️
+            </div>
+<div>
+<h4 class="font-headline-sm text-base text-white font-bold">100% KidSAFE + COPPA Certified</h4>
+<p class="text-xs text-surface-dim mt-1 leading-relaxed">
+                WonderKids adheres to the strictest FTC children's online privacy guidelines. We collect zero personally identifiable child behavioral cookies.
+              </p>
+</div>
+</div>
+<div class="p-5 rounded-2xl bg-white/5 border border-white/10 flex items-start gap-4">
+<div class="w-12 h-12 rounded-xl bg-secondary/20 text-secondary-fixed flex items-center justify-center text-xl shrink-0">
+              🚫
+            </div>
+<div>
+<h4 class="font-headline-sm text-base text-white font-bold">Zero Third-Party Advertising &amp; Upsells</h4>
+<p class="text-xs text-surface-dim mt-1 leading-relaxed">
+                No sneaky in-app banners, no popups, and no algorithmic rabbit holes designed to induce digital dopamine loops.
+              </p>
+</div>
+</div>
+<div class="p-5 rounded-2xl bg-white/5 border border-white/10 flex items-start gap-4">
+<div class="w-12 h-12 rounded-xl bg-tertiary/20 text-tertiary-fixed flex items-center justify-center text-xl shrink-0">
+              👩‍🏫
+            </div>
+<div>
+<h4 class="font-headline-sm text-base text-white font-bold">Curriculum Grounded by Real Teachers</h4>
+<p class="text-xs text-surface-dim mt-1 leading-relaxed">
+                Every game and story undergoes review by early childhood educators to align with Common Core and Montessori early inquiry principles.
+              </p>
+</div>
+</div>
+</div>
+</div>
+<!-- 3 Testimonial Cards (beblessed.io rhythm) -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-6 border-t border-white/10">
+<div class="p-5 rounded-2xl bg-white/5 border border-white/10">
+<div class="flex items-center gap-1 text-tertiary-fixed mb-3">
+            ★★★★★
+          </div>
+<p class="text-xs text-surface-dim italic mb-4 leading-relaxed">
+            “Finally an educational app that doesn't bombard my 5-year-old with toy ads! The coloring book and read-along stories are pure magic.”
+          </p>
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-primary-fixed text-primary font-bold text-xs flex items-center justify-center">
+              EK
+            </div>
+<div>
+<span class="text-xs font-bold text-white block">Dr. Emily Krause</span>
+<span class="text-[10px] text-surface-dim">Child Psychologist &amp; Mom of 2</span>
+</div>
+</div>
+</div>
+<div class="p-5 rounded-2xl bg-white/5 border border-white/10">
+<div class="flex items-center gap-1 text-tertiary-fixed mb-3">
+            ★★★★★
+          </div>
+<p class="text-xs text-surface-dim italic mb-4 leading-relaxed">
+            “I recommend WonderKids to every parent in my kindergarten class. The math games make counting intuitive, tactile, and rewarding.”
+          </p>
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-secondary-fixed text-secondary font-bold text-xs flex items-center justify-center">
+              MR
+            </div>
+<div>
+<span class="text-xs font-bold text-white block">Marcus Reed</span>
+<span class="text-[10px] text-surface-dim">Kindergarten Lead Educator</span>
+</div>
+</div>
+</div>
+<div class="p-5 rounded-2xl bg-white/5 border border-white/10">
+<div class="flex items-center gap-1 text-tertiary-fixed mb-3">
+            ★★★★★
+          </div>
+<p class="text-xs text-surface-dim italic mb-4 leading-relaxed">
+            “The screen time timers and bedtime story features have completely eliminated evening screen tantrums in our home. Wonderful work!”
+          </p>
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-tertiary-fixed text-tertiary font-bold text-xs flex items-center justify-center">
+              SL
+            </div>
+<div>
+<span class="text-xs font-bold text-white block">Sarah Lin</span>
+<span class="text-[10px] text-surface-dim">Parent of 6-year-old twins</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>

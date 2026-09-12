@@ -1,0 +1,85 @@
+<%- include('partials/head', { title: title }) %>
+<body class="bg-background text-on-surface antialiased selection:bg-primary-fixed selection:text-on-primary-fixed">
+<%- include('partials/navbar', { progress: progress, activeNav: activeNav }) %>
+<!-- ==================== PARENT ZONE PAGE HEADER ==================== -->
+<section class="pt-10 pb-2">
+<div class="max-w-[1240px] mx-auto px-6">
+<nav class="flex items-center gap-2 text-xs font-label-sm text-on-surface-variant mb-4" aria-label="Breadcrumb">
+<a class="hover:text-primary transition-colors" href="/">Home</a>
+<span class="material-symbols-outlined text-sm">chevron_right</span>
+<span class="text-on-surface font-bold">Parent Zone</span>
+</nav>
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+<div>
+<span class="text-label-sm font-label-sm font-bold text-secondary tracking-wider uppercase px-3 py-1 rounded-full bg-secondary-fixed mb-2 inline-block">
+            GROWN-UPS ONLY
+          </span>
+<h1 class="text-headline-lg-mobile md:text-headline-lg font-headline-lg text-on-surface">
+            <%= progress.name %>’s Parent Dashboard
+          </h1>
+<p class="text-body-md font-body-md text-on-surface-variant">
+            A calm, transparent view of progress, screen time and the safety standards guarding every session.
+          </p>
+</div>
+<div class="flex items-center gap-3">
+<a class="px-5 py-2.5 rounded-full bg-surface-container-lowest border border-surface-container-highest text-xs font-bold text-on-surface hover:bg-surface-container flex items-center gap-1.5" href="/">
+<span class="material-symbols-outlined text-sm">arrow_back</span>
+<span>Back to Playground</span>
+</a>
+<button class="px-5 py-2.5 rounded-full bg-primary-container text-white text-xs font-bold hover:opacity-90 active:scale-95 transition-all shadow-sm flex items-center gap-1.5 custom-glow-primary">
+<span class="material-symbols-outlined text-sm">download</span>
+<span>Export Weekly Report</span>
+</button>
+</div>
+</div>
+<!-- Quick Progress Snapshot -->
+<div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mt-8">
+<div class="tactile-card rounded-2xl p-5 custom-pill-shadow">
+<span class="text-[11px] text-on-surface-variant font-label-sm uppercase block">Current Level</span>
+<span class="text-headline-md font-headline-md text-primary block mt-1">Lvl <%= progress.level %></span>
+<span class="text-xs text-on-surface-variant"><%= progress.levelTitle %> rank</span>
+</div>
+<div class="tactile-card rounded-2xl p-5 custom-pill-shadow">
+<span class="text-[11px] text-on-surface-variant font-label-sm uppercase block">Stars Collected</span>
+<span class="text-headline-md font-headline-md text-tertiary block mt-1"><%= progress.stars %> ⭐</span>
+<span class="text-xs text-on-surface-variant">Lifetime total</span>
+</div>
+<div class="tactile-card rounded-2xl p-5 custom-pill-shadow">
+<span class="text-[11px] text-on-surface-variant font-label-sm uppercase block">Experience</span>
+<span class="text-headline-md font-headline-md text-secondary block mt-1"><%= progress.xp.toLocaleString('en-US') %> XP</span>
+<span class="text-xs text-on-surface-variant">of <%= progress.xpGoal.toLocaleString('en-US') %> goal</span>
+</div>
+<div class="tactile-card rounded-2xl p-5 custom-pill-shadow">
+<span class="text-[11px] text-on-surface-variant font-label-sm uppercase block">Daily Quests</span>
+<span class="text-headline-md font-headline-md text-emerald-600 block mt-1"><%= progress.questsCompleted %>/<%= progress.totalQuests %></span>
+<span class="text-xs text-on-surface-variant">Completed today</span>
+</div>
+</div>
+</div>
+</section>
+<%- include('partials/parent-zone') %>
+<!-- ==================== COMPLETED MILESTONES ==================== -->
+<section class="py-16">
+<div class="max-w-[1240px] mx-auto px-6">
+<div class="flex items-center gap-3 mb-8">
+<span class="material-symbols-outlined text-3xl text-primary fill-icon" style="font-variation-settings: 'FILL' 1;">emoji_events</span>
+<h2 class="text-headline-lg-mobile md:text-headline-lg font-headline-lg text-on-surface">Completed Milestones</h2>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<% progress.completedSteps.forEach(function (step, index) { %>
+<div class="tactile-card rounded-2xl p-5 flex items-center gap-4 border-l-4 border-l-emerald-500 shadow-sm">
+<div class="w-10 h-10 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold">
+<span class="material-symbols-outlined text-base">check</span>
+</div>
+<div class="flex-1">
+<span class="text-[10px] uppercase font-bold text-emerald-700 tracking-wider block">Milestone <%= index + 1 %></span>
+<h4 class="font-headline-sm text-base text-on-surface font-bold"><%= step %></h4>
+</div>
+<span class="text-xs font-label-sm text-emerald-700 font-bold bg-emerald-50 px-2.5 py-1 rounded-full">+25 ⭐</span>
+</div>
+<% }); %>
+</div>
+</div>
+</section>
+<%- include('partials/footer') %>
+</body></html>

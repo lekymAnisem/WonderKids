@@ -1,0 +1,119 @@
+<%- include('partials/head', { title: title }) %>
+<body class="bg-background text-on-surface antialiased selection:bg-primary-fixed selection:text-on-primary-fixed">
+<%- include('partials/navbar', { progress: progress, activeNav: activeNav }) %>
+
+<section class="relative overflow-hidden pt-8 pb-12 md:pt-14 md:pb-20">
+  <div class="absolute top-10 left-1/2 -translate-x-1/2 w-[700px] h-[300px] bg-error-container/20 rounded-full blur-3xl pointer-events-none -z-10"></div>
+  <div class="max-w-[1240px] mx-auto px-6">
+    <div class="text-center max-w-3xl mx-auto flex flex-col items-center">
+      <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-error-container/30 text-error font-label-sm mb-5 shadow-sm">
+        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+        <span>Malik's Wonderland</span>
+      </div>
+      <h1 class="text-headline-lg-mobile md:text-display font-headline-lg md:font-display text-on-surface tracking-tight mb-4">
+        Watch & <span class="text-error inline-block underline decoration-wavy decoration-error-container/70 decoration-2">Learn!</span>
+      </h1>
+      <p class="text-body-md md:text-body-lg font-body-md md:font-body-lg text-on-surface-variant max-w-2xl mb-8">
+        Fun, safe, and educational videos from Malik's Wonderland. Perfect for curious young minds who love to learn through play!
+      </p>
+    </div>
+  </div>
+</section>
+
+<section class="py-12">
+  <div class="max-w-[1240px] mx-auto px-6">
+
+    <div class="rounded-3xl overflow-hidden tactile-card custom-floating-shadow mb-12 border-2 border-surface-container-highest">
+      <div class="bg-inverse-surface p-4 sm:p-6">
+        <div class="flex items-center gap-3 mb-4">
+          <div class="w-10 h-10 rounded-full bg-error flex items-center justify-center">
+            <svg class="w-5 h-5 text-white" viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+          </div>
+          <div>
+            <h3 class="text-headline-sm font-headline-sm text-white">Malik's Wonderland</h3>
+            <span class="text-xs text-white/70 font-body-sm">Subscribe for more fun videos!</span>
+          </div>
+          <a class="ml-auto px-5 py-2 rounded-full bg-error text-white font-label-sm font-bold hover:opacity-90 active:scale-95 transition-all shadow-sm flex items-center gap-1.5" href="https://www.youtube.com/@MalikWonderland" target="_blank" rel="noopener noreferrer">
+            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+            <span>Visit Channel</span>
+          </a>
+        </div>
+        <div class="relative w-full aspect-video rounded-2xl overflow-hidden bg-black">
+          <iframe class="w-full h-full" id="mainPlayer" src="https://www.youtube.com/embed/<%= videos.length > 0 ? videos[0].youtubeId : 'qyFNWVTHjPM' %>?rel=0" title="Video Player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+        </div>
+      </div>
+    </div>
+
+    <div class="text-center max-w-2xl mx-auto mb-10">
+      <span class="text-label-sm font-label-sm font-bold text-secondary tracking-wider uppercase px-3 py-1 rounded-full bg-secondary-fixed mb-2 inline-block">
+        POPULAR PICKS
+      </span>
+      <h2 class="text-headline-lg-mobile md:text-headline-lg font-headline-lg text-on-surface">
+        Choose a Video to Watch
+      </h2>
+      <p class="text-body-md font-body-md text-on-surface-variant">
+        Tap any video to start playing it in the player above.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+      <% videos.forEach(function(v, i) { %>
+      <button class="video-card tactile-card rounded-2xl overflow-hidden hover:translate-y-[-4px] transition-all duration-200 cursor-pointer group text-left p-0 bg-surface-container-lowest" data-id="<%= v.youtubeId %>">
+        <div class="relative w-full aspect-video overflow-hidden">
+          <img class="w-full h-full object-cover" src="https://img.youtube.com/vi/<%= v.youtubeId %>/hqdefault.jpg" alt="<%= v.title %>" loading="lazy">
+          <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent z-10"></div>
+          <div class="absolute inset-0 flex items-center justify-center z-20">
+            <div class="w-16 h-16 rounded-full bg-white/90 flex items-center justify-center group-hover:scale-110 transition-transform shadow-lg">
+              <svg class="w-6 h-6 text-error ml-1" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+            </div>
+          </div>
+        </div>
+        <div class="p-4">
+          <h4 class="font-headline-sm text-sm font-bold text-on-surface mb-1 group-hover:text-error transition-colors"><%= v.title %></h4>
+          <p class="text-xs text-on-surface-variant font-body-sm">Tap to watch</p>
+        </div>
+      </button>
+      <% }) %>
+      <% if (videos.length === 0) { %>
+      <div class="col-span-3 text-center py-12">
+        <span class="text-5xl mb-4 block">📺</span>
+        <p class="text-on-surface-variant font-body-md">No videos available yet. Check back soon!</p>
+      </div>
+      <% } %>
+    </div>
+
+    <div class="rounded-3xl p-8 sm:p-12 bg-gradient-to-r from-error via-error-container to-primary-container text-white text-center relative overflow-hidden shadow-2xl">
+      <div class="absolute top-6 left-8 text-3xl opacity-40 animate-pulse">🎬</div>
+      <div class="absolute bottom-6 right-8 text-4xl opacity-40 animate-pulse" style="animation-delay: 1s;">⭐</div>
+      <div class="max-w-2xl mx-auto relative z-10">
+        <h2 class="text-headline-lg-mobile md:text-headline-lg font-headline-lg text-white mb-4">
+          Enjoyed the Videos?
+        </h2>
+        <p class="text-body-md font-body-md text-white/90 mb-6">
+          Visit Malik's Wonderland on YouTube and subscribe for new fun, educational videos every week!
+        </p>
+        <a class="px-8 py-4 rounded-full bg-white text-error font-label-lg font-bold shadow-lg hover:bg-surface-container-low active:scale-95 transition-all duration-150 inline-flex items-center gap-2" href="https://www.youtube.com/@MalikWonderland/videos" target="_blank" rel="noopener noreferrer">
+          <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+          Visit Malik's Wonderland
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<%- include('partials/parent-zone') %>
+<%- include('partials/footer') %>
+<script>
+  (function () {
+    var player = document.getElementById('mainPlayer');
+    var cards = document.querySelectorAll('.video-card');
+    cards.forEach(function (card) {
+      card.addEventListener('click', function () {
+        var id = card.getAttribute('data-id');
+        player.src = 'https://www.youtube.com/embed/' + id + '?rel=0&autoplay=1';
+        window.scrollTo({ top: player.getBoundingClientRect().top + window.pageYOffset - 120, behavior: 'smooth' });
+      });
+    });
+  })();
+</script>
+</body></html>

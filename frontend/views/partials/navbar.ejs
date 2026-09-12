@@ -1,0 +1,67 @@
+<!-- ==================== TOP NAVBAR ==================== -->
+<header class="sticky top-0 w-full z-50 rounded-b-lg shadow-sm bg-surface-container-lowest/90 backdrop-blur-md">
+<div class="flex items-center justify-between px-6 py-3 max-w-[1240px] mx-auto w-full">
+<!-- Brand Logo -->
+<a class="flex items-center gap-2 group active:scale-95 transition-transform duration-150" href="/">
+<div class="w-10 h-10 rounded-full bg-primary-fixed flex items-center justify-center text-primary shadow-sm group-hover:rotate-12 transition-transform duration-200">
+<span class="material-symbols-outlined text-[26px] fill-icon" style="font-variation-settings: 'FILL' 1;">kid_star</span>
+</div>
+<div class="flex flex-col">
+<span class="text-headline-md font-headline-md font-bold text-primary tracking-tight">WonderKids</span>
+<span class="text-[10px] font-label-sm text-secondary font-bold tracking-wider -mt-1 hidden sm:block">LEARN • PLAY • IMAGINE</span>
+</div>
+</a>
+<!-- Navigation Links -->
+<nav class="hidden lg:flex items-center gap-6">
+<a class="<%= activeNav === 'home' ? 'text-primary border-b-2 border-primary font-label-md pb-1 hover:opacity-90 transition-all duration-200' : 'text-on-surface-variant font-label-md hover:text-primary transition-colors' %>" href="/#hero">Home</a>
+<a class="<%= activeNav === 'activities' ? 'text-primary border-b-2 border-primary font-label-md pb-1 hover:opacity-90 transition-all duration-200' : 'text-on-surface-variant font-label-md hover:text-primary transition-colors' %>" href="/#activities">Activities</a>
+<a class="<%= activeNav === 'coloring' ? 'text-primary border-b-2 border-primary font-label-md pb-1 hover:opacity-90 transition-all duration-200' : 'text-on-surface-variant font-label-md hover:text-primary transition-colors' %>" href="/coloring">Coloring</a>
+<a class="<%= activeNav === 'stories' ? 'text-primary border-b-2 border-primary font-label-md pb-1 hover:opacity-90 transition-all duration-200' : 'text-on-surface-variant font-label-md hover:text-primary transition-colors' %>" href="/stories">Stories</a>
+<a class="<%= activeNav === 'games' ? 'text-primary border-b-2 border-primary font-label-md pb-1 hover:opacity-90 transition-all duration-200' : 'text-on-surface-variant font-label-md hover:text-primary transition-colors' %>" href="/games">Games</a>
+<a class="<%= activeNav === 'videos' ? 'text-primary border-b-2 border-primary font-label-md pb-1 hover:opacity-90 transition-all duration-200' : 'text-on-surface-variant font-label-md hover:text-primary transition-colors' %>" href="/videos">Videos</a>
+<a class="<%= activeNav === 'wall' ? 'text-primary border-b-2 border-primary font-label-md pb-1 hover:opacity-90 transition-all duration-200' : 'text-on-surface-variant font-label-md hover:text-primary transition-colors' %>" href="/wall">Wall</a>
+<% if (typeof user !== 'undefined' && user) { %>
+<a class="text-on-surface-variant font-label-md hover:text-primary transition-colors flex items-center gap-1" href="/wall/friends">
+<span class="material-symbols-outlined text-sm">group</span> Friends
+</a>
+<% } %>
+<% if (typeof user !== 'undefined' && user && user.role === 'admin') { %>
+<a class="text-tertiary font-label-md hover:opacity-80 transition-colors flex items-center gap-1" href="/admin">
+<span class="material-symbols-outlined text-sm">admin_panel_settings</span> Admin
+</a>
+<% } %>
+<% if (typeof user !== 'undefined' && user) { %>
+<a class="<%= activeNav === 'my-artwork' ? 'text-primary border-b-2 border-primary font-label-md pb-1 hover:opacity-90 transition-all duration-200' : 'text-on-surface-variant font-label-md hover:text-primary transition-colors' %>" href="/my-artwork">
+<span class="material-symbols-outlined text-sm align-middle">palette</span> My Art
+</a>
+<% } %>
+</nav>
+<!-- Trailing Action Buttons -->
+<div class="flex items-center gap-3">
+<% if (typeof user !== 'undefined' && user) { %>
+<!-- Logged in user -->
+<a href="/auth/profile" class="hidden sm:flex items-center gap-2 bg-surface-container-low px-3 py-1.5 rounded-full border border-secondary-fixed hover:border-secondary transition-colors cursor-pointer group" title="My Profile">
+<div class="w-7 h-7 rounded-full bg-secondary-container text-on-secondary-container flex items-center justify-center font-bold text-xs group-hover:scale-110 transition-transform">
+  <%= user.avatar %>
+</div>
+<div class="flex flex-col text-left pr-1">
+<span class="text-xs font-label-md font-bold text-on-surface leading-tight"><%= user.name %></span>
+<span class="text-[10px] text-tertiary font-bold"><%= user.role === 'admin' ? 'Admin' : 'Explorer' %></span>
+</div>
+</a>
+<a class="text-on-surface-variant font-label-md hover:text-primary transition-colors px-3 py-2 rounded-full hidden md:inline-block active:scale-95 duration-150 flex items-center gap-1" href="/auth/logout">
+  <span class="material-symbols-outlined text-sm">logout</span> Sign Out
+</a>
+<% } else { %>
+<!-- Not logged in -->
+<a class="text-on-surface-variant font-label-md hover:text-primary transition-colors px-3 py-2 rounded-full hidden md:inline-block active:scale-95 duration-150" href="/auth/login">
+  Sign In
+</a>
+<a class="bg-primary-container text-on-tertiary px-5 py-2.5 rounded-full font-label-md font-bold shadow-md hover:opacity-90 active:scale-95 transition-all duration-150 flex items-center gap-1.5 custom-glow-primary" href="/auth/signup">
+<span>Sign Up</span>
+<span class="material-symbols-outlined text-sm fill-icon" style="font-variation-settings: 'FILL' 1;">star</span>
+</a>
+<% } %>
+</div>
+</div>
+</header>

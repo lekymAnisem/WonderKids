@@ -1,0 +1,68 @@
+<%- include('partials/head', { title: title }) %>
+<body class="bg-background text-on-surface antialiased selection:bg-primary-fixed selection:text-on-primary-fixed">
+<%- include('partials/navbar', { progress: progress, activeNav: activeNav }) %>
+
+<section class="relative overflow-hidden pt-12 pb-20 md:pt-20 md:pb-28">
+  <div class="absolute top-10 left-1/4 w-[500px] h-[300px] bg-primary-fixed/30 rounded-full blur-3xl pointer-events-none -z-10"></div>
+  <div class="absolute bottom-10 right-1/4 w-[400px] h-[250px] bg-secondary-fixed/30 rounded-full blur-3xl pointer-events-none -z-10"></div>
+
+  <div class="max-w-md mx-auto px-6">
+    <div class="text-center mb-8">
+      <div class="w-16 h-16 rounded-full bg-primary-fixed flex items-center justify-center mx-auto mb-4 shadow-sm">
+        <span class="material-symbols-outlined text-3xl fill-icon text-primary" style="font-variation-settings: 'FILL' 1;">kid_star</span>
+      </div>
+      <h1 class="text-headline-lg-mobile md:text-headline-lg font-headline-lg text-on-surface tracking-tight mb-2">
+        Welcome Back!
+      </h1>
+      <p class="text-body-md font-body-md text-on-surface-variant">
+        Sign in to continue your learning adventure
+      </p>
+    </div>
+
+    <% if (error) { %>
+    <div class="mb-6 p-4 rounded-2xl bg-error-container/50 border border-error/30 flex items-center gap-3">
+      <span class="material-symbols-outlined text-error">error</span>
+      <span class="text-sm text-on-error-container font-body-sm"><%= error %></span>
+    </div>
+    <% } %>
+
+    <div class="tactile-card rounded-3xl p-8 custom-floating-shadow border-2 border-surface-container-highest">
+      <form method="POST" action="/auth/login" class="flex flex-col gap-5">
+        <div>
+          <label for="email" class="block text-xs font-label-md font-bold text-on-surface-variant mb-2 uppercase tracking-wider">Email Address</label>
+          <input type="email" id="email" name="email" required autocomplete="email" placeholder="you@example.com"
+            class="w-full px-4 py-3 rounded-xl bg-surface-container-low border-2 border-surface-container-highest text-on-surface font-body-md placeholder:text-on-surface-variant/50 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all">
+        </div>
+
+        <div>
+          <label for="password" class="block text-xs font-label-md font-bold text-on-surface-variant mb-2 uppercase tracking-wider">Password</label>
+          <input type="password" id="password" name="password" required autocomplete="current-password" placeholder="Enter your password"
+            class="w-full px-4 py-3 rounded-xl bg-surface-container-low border-2 border-surface-container-highest text-on-surface font-body-md placeholder:text-on-surface-variant/50 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all">
+        </div>
+
+        <button type="submit"
+          class="w-full py-3.5 rounded-full bg-primary-container text-white font-label-lg font-bold shadow-lg hover:opacity-90 active:scale-[0.98] transition-all custom-glow-primary flex items-center justify-center gap-2 mt-2">
+          <span>Sign In</span>
+          <span class="material-symbols-outlined text-sm">arrow_forward</span>
+        </button>
+      </form>
+
+      <div class="mt-6 pt-6 border-t border-surface-container text-center">
+        <p class="text-sm text-on-surface-variant font-body-sm">
+          Don't have an account?
+          <a href="/auth/signup" class="text-primary font-bold hover:underline">Create one here</a>
+        </p>
+      </div>
+    </div>
+
+    <div class="mt-6 text-center">
+      <p class="text-xs text-on-surface-variant/60 font-body-sm">
+        <span class="material-symbols-outlined text-xs align-middle">security</span>
+        Safe & secure. We never share your data.
+      </p>
+    </div>
+  </div>
+</section>
+
+<%- include('partials/footer') %>
+</body></html>

@@ -1,0 +1,131 @@
+<%- include('partials/head', { title: title }) %>
+<body class="bg-background text-on-surface antialiased selection:bg-primary-fixed selection:text-on-primary-fixed">
+<%- include('partials/navbar', { progress: progress, activeNav: activeNav }) %>
+
+<section class="relative overflow-hidden pt-8 pb-16 md:pt-12">
+  <div class="absolute top-10 left-1/2 -translate-x-1/2 w-[600px] h-[250px] bg-secondary-fixed/30 rounded-full blur-3xl pointer-events-none -z-10"></div>
+  <div class="max-w-3xl mx-auto px-4">
+    <div class="flex items-center justify-between mb-8">
+      <div>
+        <h1 class="text-headline-lg-mobile md:text-headline-lg font-headline-lg text-on-surface tracking-tight">
+          My <span class="text-secondary-container">Friends</span>
+        </h1>
+        <p class="text-body-sm font-body-sm text-on-surface-variant">Connect with other WonderKids explorers</p>
+      </div>
+      <a href="/wall" class="px-4 py-2 rounded-full bg-surface-container text-on-surface-variant text-xs font-label-sm font-bold hover:bg-surface-container-high transition-colors flex items-center gap-1.5">
+        <span class="material-symbols-outlined text-sm">arrow_back</span> Back to Wall
+      </a>
+    </div>
+
+    <!-- Pending Requests -->
+    <% if (pendingRequests.length > 0) { %>
+    <div class="mb-8">
+      <h2 class="font-headline-sm text-headline-sm text-on-surface mb-4 flex items-center gap-2">
+        <span class="material-symbols-outlined text-secondary">person_add</span> Friend Requests
+        <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-secondary text-white"><%= pendingRequests.length %></span>
+      </h2>
+      <div class="flex flex-col gap-3">
+        <% pendingRequests.forEach(function(u) { %>
+        <div class="tactile-card rounded-xl p-4 flex items-center gap-3 border border-surface-container-highest">
+          <div class="w-12 h-12 rounded-full bg-secondary-container text-on-secondary-container flex items-center justify-center text-xl font-bold shrink-0"><%= u.avatar %></div>
+          <div class="flex-1 min-w-0">
+            <span class="font-label-md font-bold text-on-surface text-sm block"><%= u.name %></span>
+            <span class="text-[11px] text-on-surface-variant">Wants to be your friend</span>
+          </div>
+          <div class="flex gap-2 shrink-0">
+            <button class="accept-friend-btn px-4 py-2 rounded-full bg-secondary text-white text-xs font-bold hover:opacity-90 active:scale-95 transition-all" data-user-id="<%= u.id %>">Accept</button>
+            <button class="decline-friend-btn px-3 py-2 rounded-full bg-surface-container text-on-surface-variant text-xs font-bold hover:bg-surface-container-high transition-all" data-user-id="<%= u.id %>">Decline</button>
+          </div>
+        </div>
+        <% }) %>
+      </div>
+    </div>
+    <% } %>
+
+    <!-- Current Friends -->
+    <div class="mb-8">
+      <h2 class="font-headline-sm text-headline-sm text-on-surface mb-4 flex items-center gap-2">
+        <span class="material-symbols-outlined text-secondary">group</span> Friends
+        <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-secondary-fixed text-secondary"><%= friends.length %></span>
+      </h2>
+      <% if (friends.length === 0) { %>
+      <div class="text-center py-8 tactile-card rounded-xl border border-surface-container">
+        <span class="text-4xl mb-3 block">👋</span>
+        <p class="text-sm text-on-surface-variant">No friends yet. Add some below!</p>
+      </div>
+      <% } else { %>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <% friends.forEach(function(f) { %>
+        <div class="tactile-card rounded-xl p-4 flex items-center gap-3 border border-surface-container-highest">
+          <div class="w-10 h-10 rounded-full bg-secondary-container text-on-secondary-container flex items-center justify-center text-lg font-bold shrink-0"><%= f.avatar %></div>
+          <div class="flex-1 min-w-0">
+            <span class="font-label-md font-bold text-on-surface text-sm block truncate"><%= f.name %></span>
+            <span class="text-[11px] text-emerald-600 font-bold flex items-center gap-1">
+              <span class="material-symbols-outlined text-[12px]">check_circle</span> Friends
+            </span>
+          </div>
+          <button class="remove-friend-btn p-2 rounded-lg hover:bg-error-container/50 text-error transition-colors" data-user-id="<%= f.id %>" title="Remove friend">
+            <span class="material-symbols-outlined text-sm">person_remove</span>
+          </button>
+        </div>
+        <% }) %>
+      </div>
+      <% } %>
+    </div>
+
+    <!-- People You May Know -->
+    <% if (suggestions.length > 0) { %>
+    <div>
+      <h2 class="font-headline-sm text-headline-sm text-on-surface mb-4 flex items-center gap-2">
+        <span class="material-symbols-outlined text-tertiary">person_search</span> People You May Know
+      </h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <% suggestions.forEach(function(s) { %>
+        <div class="tactile-card rounded-xl p-4 flex items-center gap-3 border border-surface-container-highest">
+          <div class="w-10 h-10 rounded-full bg-tertiary-fixed text-on-tertiary-container flex items-center justify-center text-lg font-bold shrink-0"><%= s.avatar %></div>
+          <div class="flex-1 min-w-0">
+            <span class="font-label-md font-bold text-on-surface text-sm block truncate"><%= s.name %></span>
+            <span class="text-[11px] text-on-surface-variant"><%= s.role === 'admin' ? 'Admin' : 'Explorer' %></span>
+          </div>
+          <% if (sentIds && sentIds.includes(s.id)) { %>
+          <span class="px-3 py-1.5 rounded-full bg-surface-container text-on-surface-variant text-[10px] font-bold">Sent</span>
+          <% } else { %>
+          <button class="add-friend-btn px-3 py-1.5 rounded-full bg-secondary text-white text-[10px] font-bold hover:opacity-90 active:scale-95 transition-all flex items-center gap-1" data-user-id="<%= s.id %>">
+            <span class="material-symbols-outlined text-[12px]">person_add</span> Add
+          </button>
+          <% } %>
+        </div>
+        <% }) %>
+      </div>
+    </div>
+    <% } %>
+  </div>
+</section>
+
+<%- include('partials/footer') %>
+<script>
+(function() {
+  function friendAction(url, userId, btn) {
+    fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ userId: userId })
+    }).then(function(r) { return r.json(); }).then(function(data) {
+      if (data.success) window.location.reload();
+    }).catch(function() {});
+  }
+
+  document.querySelectorAll('.add-friend-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() { friendAction('/wall/friend/add', btn.getAttribute('data-user-id'), btn); });
+  });
+  document.querySelectorAll('.accept-friend-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() { friendAction('/wall/friend/accept', btn.getAttribute('data-user-id'), btn); });
+  });
+  document.querySelectorAll('.decline-friend-btn, .remove-friend-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      if (confirm('Are you sure?')) friendAction('/wall/friend/remove', btn.getAttribute('data-user-id'), btn);
+    });
+  });
+})();
+</script>
+</body></html>

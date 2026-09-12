@@ -1,0 +1,413 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+// ---------------------------------------------------------------------------
+// Auth
+// ---------------------------------------------------------------------------
+
+enum Role {
+  PARENT
+  ADMIN
+}
+
+model User {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  name         String
+  passwordHash String
+  role         Role     @default(PARENT)
+  isActive     Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  refreshTokens        RefreshToken[]
+  passwordResetTokens  PasswordResetToken[]
+  children             ParentChild[]
+  createdColoringPages ColoringPage[]       @relation("ColoringPageAuthor")
+  createdStories       Story[]              @relation("StoryAuthor")
+  createdGames         Game[]               @relation("GameAuthor")
+
+  @@index([role])
+  @@map("users")
+}
+
+model RefreshToken {
+  id        String    @id @default(cuid())
+  tokenHash String    @unique
+  userId    String
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userAgent String?
+  ip        String?
+  expiresAt DateTime
+  revokedAt DateTime?
+  createdAt DateTime  @default(now())
+
+  @@index([userId])
+  @@index([expiresAt])
+  @@map("refresh_tokens")
+}
+
+model PasswordResetToken {
+  id        String    @id @default(cuid())
+  tokenHash String    @unique
+  userId    String
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expiresAt DateTime
+  usedAt    DateTime?
+  createdAt DateTime  @default(now())
+
+  @@index([userId])
+  @@index([expiresAt])
+  @@map("password_reset_tokens")
+}
+
+// ---------------------------------------------------------------------------
+// Children
+// ---------------------------------------------------------------------------
+
+model Child {
+  id          String   @id @default(cuid())
+  displayName String
+  avatar      String?
+  ageGroup    String
+  level       Int      @default(1)
+  stars       Int      @default(0)
+  xp          Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  parents          ParentChild[]
+  coloringSessions ColoringSession[]
+  storyProgress    StoryProgress[]
+  gameSessions     GameSession[]
+  achievements     ChildAchievement[]
+  activityProgress ActivityProgress[]
+  favorites        Favorite[]
+
+  @@index([ageGroup])
+  @@map("children")
+}
+
+model ParentChild {
+  id           String   @id @default(cuid())
+  parentId     String
+  childId      String
+  parent       User     @relation(fields: [parentId], references: [id], onDelete: Cascade)
+  child        Child    @relation(fields: [childId], references: [id], onDelete: Cascade)
+  relationship String?
+  createdAt    DateTime @default(now())
+
+  @@unique([parentId, childId])
+  @@index([childId])
+  @@map("parent_children")
+}
+
+// ---------------------------------------------------------------------------
+// Coloring
+// ---------------------------------------------------------------------------
+
+enum ColoringCategory {
+  ANIMALS
+  DINOSAURS
+  SPACE
+  NATURE
+  VEHICLES
+  FANTASY
+  UNDER_THE_SEA
+  SEASONS
+}
+
+enum Difficulty {
+  EASY
+  MEDIUM
+  HARD
+}
+
+model ColoringPage {
+  id            String           @id @default(cuid())
+  title         String
+  description   String?
+  category      ColoringCategory
+  ageGroup      String
+  difficulty    Difficulty       @default(EASY)
+  lineArtUrl    String
+  thumbnailUrl  String?
+  storageKey    String?
+  isPublished   Boolean          @default(true)
+  isAiGenerated Boolean          @default(false)
+  prompt        String?
+  createdById   String?
+  createdBy     User?            @relation("ColoringPageAuthor", fields: [createdById], references: [id], onDelete: SetNull)
+  createdAt     DateTime         @default(now())
+  updatedAt     DateTime         @updatedAt
+
+  sessions ColoringSession[]
+
+  @@index([category])
+  @@index([ageGroup])
+  @@index([isPublished])
+  @@map("coloring_pages")
+}
+
+enum ColoringSessionStatus {
+  IN_PROGRESS
+  COMPLETED
+}
+
+model ColoringSession {
+  id          String                @id @default(cuid())
+  childId     String
+  child       Child                 @relation(fields: [childId], references: [id], onDelete: Cascade)
+  pageId      String
+  page        ColoringPage          @relation(fields: [pageId], references: [id], onDelete: Cascade)
+  status      ColoringSessionStatus @default(IN_PROGRESS)
+  canvasData  Json?
+  imageUrl    String?
+  startedAt   DateTime              @default(now())
+  updatedAt   DateTime              @updatedAt
+  completedAt DateTime?
+
+  @@index([childId])
+  @@index([pageId])
+  @@index([status])
+  @@map("coloring_sessions")
+}
+
+// ---------------------------------------------------------------------------
+// Stories
+// ---------------------------------------------------------------------------
+
+enum StoryCategory {
+  ADVENTURE
+  ANIMALS
+  FANTASY
+  SCIENCE
+  NATURE
+  BEDTIME
+  FRIENDSHIP
+}
+
+model Story {
+  id                 String        @id @default(cuid())
+  title              String
+  description        String
+  coverImageUrl      String?
+  category           StoryCategory
+  ageGroup           String
+  readingTimeMinutes Int           @default(5)
+  difficulty         Difficulty    @default(EASY)
+  isPublished        Boolean       @default(false)
+  createdById        String?
+  createdBy          User?         @relation("StoryAuthor", fields: [createdById], references: [id], onDelete: SetNull)
+  createdAt          DateTime      @default(now())
+  updatedAt          DateTime      @updatedAt
+
+  pages    StoryPage[]
+  progress StoryProgress[]
+
+  @@index([category])
+  @@index([ageGroup])
+  @@index([isPublished])
+  @@map("stories")
+}
+
+model StoryPage {
+  id              String  @id @default(cuid())
+  storyId         String
+  story           Story   @relation(fields: [storyId], references: [id], onDelete: Cascade)
+  pageNumber      Int
+  text            String
+  illustrationUrl String?
+  audioUrl        String?
+
+  @@unique([storyId, pageNumber])
+  @@index([storyId])
+  @@map("story_pages")
+}
+
+model StoryProgress {
+  id                 String    @id @default(cuid())
+  childId            String
+  child              Child     @relation(fields: [childId], references: [id], onDelete: Cascade)
+  storyId            String
+  story              Story     @relation(fields: [storyId], references: [id], onDelete: Cascade)
+  currentPage        Int       @default(1)
+  completed          Boolean   @default(false)
+  readingTimeSeconds Int       @default(0)
+  lastOpenedAt       DateTime  @default(now())
+  completedAt        DateTime?
+
+  @@unique([childId, storyId])
+  @@index([childId])
+  @@index([completed])
+  @@map("story_progress")
+}
+
+// ---------------------------------------------------------------------------
+// Games
+// ---------------------------------------------------------------------------
+
+enum GameCategory {
+  MATH
+  READING
+  MEMORY
+  PUZZLE
+  SCIENCE
+  SHAPES
+  COLORS
+  VOCABULARY
+}
+
+model Game {
+  id           String       @id @default(cuid())
+  title        String
+  slug         String       @unique
+  description  String
+  thumbnailUrl String?
+  category     GameCategory
+  difficulty   Difficulty   @default(EASY)
+  ageGroup     String
+  instructions String
+  config       Json
+  isActive     Boolean      @default(true)
+  createdById  String?
+  createdBy    User?        @relation("GameAuthor", fields: [createdById], references: [id], onDelete: SetNull)
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+
+  sessions GameSession[]
+
+  @@index([category])
+  @@index([isActive])
+  @@map("games")
+}
+
+enum GameSessionStatus {
+  IN_PROGRESS
+  COMPLETED
+  ABANDONED
+}
+
+model GameSession {
+  id        String            @id @default(cuid())
+  gameId    String
+  game      Game              @relation(fields: [gameId], references: [id], onDelete: Cascade)
+  childId   String
+  child     Child             @relation(fields: [childId], references: [id], onDelete: Cascade)
+  status    GameSessionStatus @default(IN_PROGRESS)
+  startedAt DateTime          @default(now())
+  endedAt   DateTime?
+
+  score GameScore?
+
+  @@index([childId])
+  @@index([gameId])
+  @@index([status])
+  @@map("game_sessions")
+}
+
+model GameScore {
+  id              String      @id @default(cuid())
+  gameSessionId   String      @unique
+  gameSession     GameSession @relation(fields: [gameSessionId], references: [id], onDelete: Cascade)
+  score           Int
+  correctAnswers  Int         @default(0)
+  wrongAnswers    Int         @default(0)
+  durationSeconds Int
+  createdAt       DateTime    @default(now())
+
+  @@map("game_scores")
+}
+
+// ---------------------------------------------------------------------------
+// Achievements, progress & favorites
+// ---------------------------------------------------------------------------
+
+model Achievement {
+  id          String   @id @default(cuid())
+  code        String   @unique
+  title       String
+  description String
+  icon        String?
+  criteria    Json
+  xpReward    Int      @default(0)
+  starReward  Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  children ChildAchievement[]
+
+  @@index([code])
+  @@map("achievements")
+}
+
+model ChildAchievement {
+  id            String      @id @default(cuid())
+  childId       String
+  child         Child       @relation(fields: [childId], references: [id], onDelete: Cascade)
+  achievementId String
+  achievement   Achievement @relation(fields: [achievementId], references: [id], onDelete: Cascade)
+  awardedAt     DateTime    @default(now())
+
+  @@unique([childId, achievementId])
+  @@index([childId])
+  @@map("child_achievements")
+}
+
+enum ActivityType {
+  COLORING
+  STORY
+  GAME
+  ACTIVITY
+}
+
+enum ActivityStatus {
+  IN_PROGRESS
+  COMPLETED
+}
+
+model ActivityProgress {
+  id          String         @id @default(cuid())
+  childId     String
+  child       Child          @relation(fields: [childId], references: [id], onDelete: Cascade)
+  type        ActivityType
+  referenceId String?
+  status      ActivityStatus @default(IN_PROGRESS)
+  progress    Int            @default(0)
+  xpEarned    Int            @default(0)
+  starsEarned Int            @default(0)
+  metadata    Json?
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+
+  @@index([childId])
+  @@index([type])
+  @@index([status])
+  @@map("activity_progress")
+}
+
+enum FavoriteType {
+  STORY
+  GAME
+  COLORING
+}
+
+model Favorite {
+  id         String       @id @default(cuid())
+  childId    String
+  child      Child        @relation(fields: [childId], references: [id], onDelete: Cascade)
+  targetType FavoriteType
+  targetId   String
+  createdAt  DateTime     @default(now())
+
+  @@unique([childId, targetType, targetId])
+  @@index([childId])
+  @@map("favorites")
+}

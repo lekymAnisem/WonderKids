@@ -1,0 +1,59 @@
+<%- include('partials/head', { title: title }) %>
+<body class="bg-background text-on-surface antialiased selection:bg-primary-fixed selection:text-on-primary-fixed">
+<%- include('partials/navbar', { progress: progress, activeNav: activeNav }) %>
+
+<section class="relative overflow-hidden pt-12 pb-20 md:pt-20 md:pb-28">
+  <div class="absolute top-10 left-1/4 w-[500px] h-[300px] bg-secondary-fixed/30 rounded-full blur-3xl pointer-events-none -z-10"></div>
+  <div class="absolute bottom-10 right-1/4 w-[400px] h-[250px] bg-tertiary-fixed/30 rounded-full blur-3xl pointer-events-none -z-10"></div>
+
+  <div class="max-w-lg mx-auto px-6">
+    <div class="text-center mb-8">
+      <h1 class="text-headline-lg-mobile md:text-headline-lg font-headline-lg text-on-surface tracking-tight mb-2">
+        My Profile
+      </h1>
+      <p class="text-body-sm font-body-sm text-on-surface-variant">Customize your explorer avatar</p>
+    </div>
+
+    <% if (success) { %>
+    <div class="mb-6 p-4 rounded-2xl bg-emerald-50 border border-emerald-300 flex items-center gap-3">
+      <span class="material-symbols-outlined text-emerald-600">check_circle</span>
+      <span class="text-sm text-emerald-800 font-body-sm"><%= success %></span>
+    </div>
+    <% } %>
+
+    <!-- Current Profile Card -->
+    <div class="tactile-card rounded-3xl p-8 custom-floating-shadow border-2 border-surface-container-highest text-center mb-6">
+      <div class="w-24 h-24 rounded-full bg-secondary-container text-on-secondary-container flex items-center justify-center text-5xl mx-auto mb-4 shadow-lg border-4 border-white">
+        <%= profileUser.avatar %>
+      </div>
+      <h2 class="text-headline-sm font-headline-sm text-on-surface mb-1"><%= profileUser.name %></h2>
+      <p class="text-xs text-on-surface-variant font-body-sm mb-2"><%= profileUser.email %></p>
+      <span class="inline-block px-3 py-1 rounded-full text-[10px] font-bold font-label-sm <%= profileUser.role === 'admin' ? 'bg-tertiary-fixed text-tertiary' : 'bg-secondary-fixed text-secondary' %>">
+        <%= profileUser.role === 'admin' ? 'Admin' : 'Explorer' %>
+      </span>
+    </div>
+
+    <!-- Avatar Picker -->
+    <div class="tactile-card rounded-3xl p-6 sm:p-8 custom-floating-shadow border-2 border-surface-container-highest">
+      <h3 class="font-headline-sm text-headline-sm text-on-surface mb-2 flex items-center gap-2">
+        <span class="material-symbols-outlined text-secondary">face</span> Choose Your Avatar
+      </h3>
+      <p class="text-xs text-on-surface-variant font-body-sm mb-5">Pick an emoji that represents you on the WonderKids Wall</p>
+
+      <form method="POST" action="/auth/profile/avatar">
+        <div class="grid grid-cols-6 gap-3 mb-6">
+          <% avatars.forEach(function(a) { %>
+          <button type="submit" name="avatar" value="<%= a %>"
+            class="w-full aspect-square rounded-xl flex items-center justify-center text-3xl transition-all duration-150 cursor-pointer border-2
+            <%= profileUser.avatar === a ? 'bg-secondary-container border-secondary scale-110 shadow-md' : 'bg-surface-container-low border-surface-container hover:border-secondary hover:scale-105' %>">
+            <%= a %>
+          </button>
+          <% }) %>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<%- include('partials/footer') %>
+</body></html>

@@ -1,0 +1,207 @@
+<%- include('partials/head', { title: title }) %>
+<body class="bg-background text-on-surface antialiased selection:bg-primary-fixed selection:text-on-primary-fixed">
+<%- include('partials/navbar', { progress: progress, activeNav: activeNav }) %>
+
+<section class="relative overflow-hidden pt-8 pb-6 md:pt-12">
+  <div class="absolute top-10 left-1/2 -translate-x-1/2 w-[600px] h-[250px] bg-tertiary-fixed/30 rounded-full blur-3xl pointer-events-none -z-10"></div>
+  <div class="max-w-[1240px] mx-auto px-6">
+    <div class="flex items-center justify-between mb-6">
+      <div>
+        <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-tertiary-fixed/50 text-tertiary font-label-sm font-bold mb-3">
+          <span class="material-symbols-outlined text-sm">admin_panel_settings</span> Admin Panel
+        </span>
+        <h1 class="text-headline-lg-mobile md:text-headline-lg font-headline-lg text-on-surface">
+          Welcome, <%= user.name %>
+        </h1>
+        <p class="text-body-md font-body-md text-on-surface-variant">Manage videos, coloring sheets, and app content.</p>
+      </div>
+      <a href="/auth/logout" class="px-4 py-2 rounded-full bg-surface-container text-on-surface-variant text-xs font-label-sm font-bold hover:bg-surface-container-high transition-colors flex items-center gap-1.5">
+        <span class="material-symbols-outlined text-sm">logout</span> Sign Out
+      </a>
+    </div>
+
+    <% if (success) { %>
+    <div class="mb-6 p-4 rounded-2xl bg-emerald-50 border border-emerald-300 flex items-center gap-3">
+      <span class="material-symbols-outlined text-emerald-600">check_circle</span>
+      <span class="text-sm text-emerald-800 font-body-sm"><%= success %></span>
+    </div>
+    <% } %>
+    <% if (error) { %>
+    <div class="mb-6 p-4 rounded-2xl bg-error-container/50 border border-error/30 flex items-center gap-3">
+      <span class="material-symbols-outlined text-error">error</span>
+      <span class="text-sm text-on-error-container font-body-sm"><%= error %></span>
+    </div>
+    <% } %>
+  </div>
+</section>
+
+<section class="pb-16">
+  <div class="max-w-[1240px] mx-auto px-6">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+
+      <!-- Manage Videos -->
+      <div class="tactile-card rounded-3xl p-6 sm:p-8 custom-floating-shadow border-2 border-surface-container-highest">
+        <div class="flex items-center gap-3 mb-6">
+          <div class="w-12 h-12 rounded-2xl bg-error-container flex items-center justify-center text-2xl shadow-inner">
+            <svg class="w-6 h-6 text-error" viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+          </div>
+          <div>
+            <h2 class="text-headline-sm font-headline-sm text-on-surface">Manage Videos</h2>
+            <span class="text-xs text-on-surface-variant font-body-sm"><%= videos.length %> video(s) on page</span>
+          </div>
+        </div>
+
+        <form method="POST" action="/admin/video/add" class="flex flex-col gap-3 mb-6 p-4 rounded-2xl bg-surface-container-low border border-surface-container">
+          <div>
+            <label class="block text-xs font-label-sm font-bold text-on-surface-variant mb-1.5 uppercase tracking-wider">YouTube Video URL or ID</label>
+            <input type="text" name="youtubeId" required placeholder="https://www.youtube.com/watch?v=abc123 or just abc123"
+              class="w-full px-3 py-2.5 rounded-xl bg-surface-container-lowest border border-surface-container-highest text-on-surface text-sm font-body-sm placeholder:text-on-surface-variant/50 focus:outline-none focus:border-error focus:ring-1 focus:ring-error/20 transition-all">
+            <p class="text-[10px] text-on-surface-variant/70 mt-1">Paste a full YouTube link or just the 11-character video ID</p>
+          </div>
+          <div>
+            <label class="block text-xs font-label-sm font-bold text-on-surface-variant mb-1.5 uppercase tracking-wider">Video Title</label>
+            <input type="text" name="title" required placeholder="e.g. Learning Colors with Dinosaurs"
+              class="w-full px-3 py-2.5 rounded-xl bg-surface-container-lowest border border-surface-container-highest text-on-surface text-sm font-body-sm placeholder:text-on-surface-variant/50 focus:outline-none focus:border-error focus:ring-1 focus:ring-error/20 transition-all">
+          </div>
+          <button type="submit" class="px-5 py-2.5 rounded-full bg-error text-white font-label-sm font-bold hover:opacity-90 active:scale-95 transition-all flex items-center gap-1.5 self-start shadow-sm">
+            <span class="material-symbols-outlined text-sm">add</span> Add Video
+          </button>
+        </form>
+
+        <div class="flex flex-col gap-2 max-h-64 overflow-y-auto">
+          <% if (videos.length === 0) { %>
+          <p class="text-sm text-on-surface-variant text-center py-4">No videos yet. Add one above.</p>
+          <% } %>
+          <% videos.forEach(function(v) { %>
+          <div class="flex items-center gap-3 p-3 rounded-xl bg-surface-container-low border border-surface-container">
+            <img src="https://img.youtube.com/vi/<%= v.youtubeId %>/default.jpg" alt="" class="w-16 h-10 rounded-lg object-cover">
+            <div class="flex-1 min-w-0">
+              <p class="text-sm font-bold text-on-surface truncate"><%= v.title %></p>
+              <p class="text-[10px] text-on-surface-variant"><%= v.youtubeId %></p>
+            </div>
+            <form method="POST" action="/admin/video/delete" onsubmit="return confirm('Delete this video?')">
+              <input type="hidden" name="videoId" value="<%= v.id %>">
+              <button type="submit" class="p-1.5 rounded-lg hover:bg-error-container/50 text-error transition-colors">
+                <span class="material-symbols-outlined text-sm">delete</span>
+              </button>
+            </form>
+          </div>
+          <% }) %>
+        </div>
+      </div>
+
+      <!-- Manage Coloring Sheets -->
+      <div class="tactile-card rounded-3xl p-6 sm:p-8 custom-floating-shadow border-2 border-surface-container-highest">
+        <div class="flex items-center gap-3 mb-6">
+          <div class="w-12 h-12 rounded-2xl bg-primary-fixed flex items-center justify-center text-2xl shadow-inner">
+            <span class="material-symbols-outlined text-primary fill-icon" style="font-variation-settings: 'FILL' 1;">palette</span>
+          </div>
+          <div>
+            <h2 class="text-headline-sm font-headline-sm text-on-surface">Manage Coloring Sheets</h2>
+            <span class="text-xs text-on-surface-variant font-body-sm"><%= coloringSheets.length %> custom sheet(s)</span>
+          </div>
+        </div>
+
+        <form method="POST" action="/admin/coloring/add" id="coloringForm" class="flex flex-col gap-3 mb-6 p-4 rounded-2xl bg-surface-container-low border border-surface-container">
+          <div>
+            <label class="block text-xs font-label-sm font-bold text-on-surface-variant mb-1.5 uppercase tracking-wider">Sheet Title</label>
+            <input type="text" name="title" id="coloringTitle" required placeholder="e.g. Friendly T-Rex"
+              class="w-full px-3 py-2.5 rounded-xl bg-surface-container-lowest border border-surface-container-highest text-on-surface text-sm font-body-sm placeholder:text-on-surface-variant/50 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/20 transition-all">
+          </div>
+          <div>
+            <label class="block text-xs font-label-sm font-bold text-on-surface-variant mb-1.5 uppercase tracking-wider">Upload Image</label>
+            <input type="file" id="coloringFile" accept="image/png,image/jpeg,image/webp" required
+              class="w-full text-sm text-on-surface-variant file:mr-3 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-bold file:bg-primary-container file:text-white file:cursor-pointer hover:file:opacity-90 transition-all">
+            <input type="hidden" name="imageData" id="coloringData">
+            <img id="coloringPreview" class="mt-2 max-h-32 rounded-xl border border-surface-container hidden" alt="Preview">
+          </div>
+          <button type="submit" class="px-5 py-2.5 rounded-full bg-primary-container text-white font-label-sm font-bold hover:opacity-90 active:scale-95 transition-all flex items-center gap-1.5 self-start shadow-sm">
+            <span class="material-symbols-outlined text-sm">upload</span> Add Coloring Sheet
+          </button>
+        </form>
+
+        <div class="grid grid-cols-2 gap-3 max-h-64 overflow-y-auto">
+          <% if (coloringSheets.length === 0) { %>
+          <p class="text-sm text-on-surface-variant text-center py-4 col-span-2">No custom sheets yet. Upload one above.</p>
+          <% } %>
+          <% coloringSheets.forEach(function(s) { %>
+          <div class="relative group rounded-xl overflow-hidden border border-surface-container">
+            <img src="<%= s.image %>" alt="<%= s.title %>" class="w-full h-24 object-cover">
+            <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+              <form method="POST" action="/admin/coloring/delete" onsubmit="return confirm('Delete this sheet?')">
+                <input type="hidden" name="sheetId" value="<%= s.id %>">
+                <button type="submit" class="p-2 rounded-full bg-white/90 text-error hover:bg-white transition-colors">
+                  <span class="material-symbols-outlined text-sm">delete</span>
+                </button>
+              </form>
+            </div>
+            <div class="absolute bottom-0 left-0 right-0 bg-black/60 px-2 py-1">
+              <p class="text-[10px] text-white truncate"><%= s.title %></p>
+            </div>
+          </div>
+          <% }) %>
+        </div>
+      </div>
+
+      <!-- Users Overview -->
+      <div class="tactile-card rounded-3xl p-6 sm:p-8 custom-floating-shadow border-2 border-surface-container-highest lg:col-span-2">
+        <div class="flex items-center gap-3 mb-6">
+          <div class="w-12 h-12 rounded-2xl bg-secondary-fixed flex items-center justify-center text-2xl shadow-inner">
+            <span class="material-symbols-outlined text-secondary">group</span>
+          </div>
+          <div>
+            <h2 class="text-headline-sm font-headline-sm text-on-surface">Registered Users</h2>
+            <span class="text-xs text-on-surface-variant font-body-sm"><%= users.length %> user(s) total</span>
+          </div>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm">
+            <thead>
+              <tr class="border-b border-surface-container">
+                <th class="text-left py-2 px-3 text-xs font-label-sm font-bold text-on-surface-variant uppercase">Name</th>
+                <th class="text-left py-2 px-3 text-xs font-label-sm font-bold text-on-surface-variant uppercase">Email</th>
+                <th class="text-left py-2 px-3 text-xs font-label-sm font-bold text-on-surface-variant uppercase">Role</th>
+                <th class="text-left py-2 px-3 text-xs font-label-sm font-bold text-on-surface-variant uppercase">Joined</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% users.forEach(function(u) { %>
+              <tr class="border-b border-surface-container/50 hover:bg-surface-container-low/50">
+                <td class="py-2.5 px-3 font-body-sm"><%= u.avatar %> <%= u.name %></td>
+                <td class="py-2.5 px-3 text-on-surface-variant font-body-sm"><%= u.email %></td>
+                <td class="py-2.5 px-3">
+                  <span class="px-2 py-0.5 rounded-full text-[10px] font-bold font-label-sm <%= u.role === 'admin' ? 'bg-tertiary-fixed text-tertiary' : 'bg-secondary-fixed text-secondary' %>"><%= u.role %></span>
+                </td>
+                <td class="py-2.5 px-3 text-on-surface-variant font-body-sm text-xs"><%= new Date(u.createdAt).toLocaleDateString() %></td>
+              </tr>
+              <% }) %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<%- include('partials/footer') %>
+<script>
+(function() {
+  var fileInput = document.getElementById('coloringFile');
+  var dataInput = document.getElementById('coloringData');
+  var preview = document.getElementById('coloringPreview');
+  if (!fileInput) return;
+  fileInput.addEventListener('change', function() {
+    var file = fileInput.files[0];
+    if (!file) { dataInput.value = ''; preview.classList.add('hidden'); return; }
+    var reader = new FileReader();
+    reader.onload = function(e) {
+      dataInput.value = e.target.result;
+      preview.src = e.target.result;
+      preview.classList.remove('hidden');
+    };
+    reader.readAsDataURL(file);
+  });
+})();
+</script>
+</body></html>

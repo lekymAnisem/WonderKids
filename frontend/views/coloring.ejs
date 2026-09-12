@@ -1,0 +1,258 @@
+<%- include('partials/head', { title: title }) %>
+<body class="bg-background text-on-surface antialiased selection:bg-primary-fixed selection:text-on-primary-fixed">
+<%- include('partials/navbar', { progress: progress, activeNav: activeNav }) %>
+
+<section class="relative overflow-hidden pt-8 pb-12 md:pt-14 md:pb-20">
+  <div class="absolute top-10 left-1/2 -translate-x-1/2 w-[700px] h-[300px] bg-primary-fixed/30 rounded-full blur-3xl pointer-events-none -z-10"></div>
+  <div class="max-w-[1240px] mx-auto px-6">
+    <div class="text-center max-w-3xl mx-auto flex flex-col items-center">
+      <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary-fixed/50 text-primary font-label-sm mb-5 shadow-sm">
+        <span class="material-symbols-outlined text-sm fill-icon" style="font-variation-settings: 'FILL' 1;">palette</span>
+        <span>80+ Creative Coloring Pages</span>
+      </div>
+      <h1 class="text-headline-lg-mobile md:text-display font-headline-lg md:font-display text-on-surface tracking-tight mb-4">
+        Coloring <span class="text-primary-container inline-block underline decoration-wavy decoration-primary-fixed-dim/70 decoration-2">Studio</span>
+      </h1>
+      <p class="text-body-md md:text-body-lg font-body-md md:font-body-lg text-on-surface-variant max-w-2xl mb-8">
+        Paint, doodle, and bring cute magical worlds to life with friendly brush tools. 100% mess-free!
+      </p>
+    </div>
+  </div>
+</section>
+
+<section class="py-12">
+  <div class="max-w-[1240px] mx-auto px-6">
+    <div class="flex flex-col sm:flex-row sm:items-end justify-between mb-8 gap-4">
+      <div>
+        <span class="text-label-sm font-label-sm font-bold text-primary tracking-wider uppercase px-3 py-1 rounded-full bg-primary-fixed mb-2 inline-block">
+          HANDS-ON CREATIVITY
+        </span>
+        <h2 class="text-headline-lg-mobile md:text-headline-lg font-headline-lg text-on-surface">
+          Pick a Coloring Sheet
+        </h2>
+      </div>
+      <div class="flex flex-wrap gap-2">
+        <button class="px-4 py-1.5 rounded-full bg-primary-container text-white font-label-sm">All</button>
+        <button class="px-4 py-1.5 rounded-full bg-surface-container text-on-surface-variant hover:bg-surface-container-high font-label-sm">Dinosaurs</button>
+        <button class="px-4 py-1.5 rounded-full bg-surface-container text-on-surface-variant hover:bg-surface-container-high font-label-sm">Space</button>
+        <button class="px-4 py-1.5 rounded-full bg-surface-container text-on-surface-variant hover:bg-surface-container-high font-label-sm">Animals</button>
+        <button class="px-4 py-1.5 rounded-full bg-surface-container text-on-surface-variant hover:bg-surface-container-high font-label-sm">Fantasy</button>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-5 mb-12">
+      <% if (coloringSheets && coloringSheets.length > 0) { %>
+      <% coloringSheets.forEach(function(s) { %>
+      <button class="tactile-card rounded-2xl overflow-hidden hover:translate-y-[-4px] transition-all duration-200 cursor-pointer border-2 border-primary-container/40 text-left bg-surface-container-lowest" data-sheet="<%= s.id %>" data-custom-image="<%= s.image %>">
+        <div class="w-full h-36 bg-primary-fixed/30 overflow-hidden flex items-center justify-center">
+          <img src="<%= s.image %>" alt="<%= s.title %>" class="w-full h-full object-cover" loading="lazy">
+        </div>
+        <div class="p-3">
+          <h4 class="font-headline-sm text-sm font-bold text-on-surface"><%= s.title %></h4>
+          <span class="text-[10px] text-on-surface-variant font-body-sm">Custom Upload</span>
+        </div>
+      </button>
+      <% }) %>
+      <% } %>
+      <button class="tactile-card rounded-2xl overflow-hidden hover:translate-y-[-4px] transition-all duration-200 cursor-pointer border-2 border-primary-container/40 text-left bg-surface-container-lowest" data-sheet="dino-image">
+        <div class="w-full h-36 bg-primary-fixed/30 overflow-hidden flex items-center justify-center">
+          <img src="/images/coloring/dinosaur.jpeg" alt="Dinosaur Coloring" class="w-full h-full object-cover" loading="lazy">
+        </div>
+        <div class="p-3">
+          <h4 class="font-headline-sm text-sm font-bold text-on-surface">Dinosaur Adventure</h4>
+          <span class="text-[10px] text-on-surface-variant font-body-sm">Ages 4-8 • Real Image</span>
+        </div>
+      </button>
+      <button class="tactile-card rounded-2xl overflow-hidden hover:translate-y-[-4px] transition-all duration-200 cursor-pointer border-2 border-transparent hover:border-secondary text-left bg-surface-container-lowest" data-sheet="t-rex">
+        <div class="w-full h-36 bg-primary-fixed/30 flex items-center justify-center text-5xl">🦕</div>
+        <div class="p-3">
+          <h4 class="font-headline-sm text-sm font-bold text-on-surface">T-Rex at the Volcano</h4>
+          <span class="text-[10px] text-on-surface-variant font-body-sm">Ages 4-7 • 12 Colors</span>
+        </div>
+      </button>
+      <button class="tactile-card rounded-2xl overflow-hidden hover:translate-y-[-4px] transition-all duration-200 cursor-pointer border-2 border-transparent hover:border-secondary text-left bg-surface-container-lowest" data-sheet="space-kitty">
+        <div class="w-full h-36 bg-secondary-fixed/30 flex items-center justify-center text-5xl">🚀</div>
+        <div class="p-3">
+          <h4 class="font-headline-sm text-sm font-bold text-on-surface">Cosmic Astronaut Kitty</h4>
+          <span class="text-[10px] text-on-surface-variant font-body-sm">Ages 6-10 • Glowing Stars</span>
+        </div>
+      </button>
+      <button class="tactile-card rounded-2xl overflow-hidden hover:translate-y-[-4px] transition-all duration-200 cursor-pointer border-2 border-transparent hover:border-tertiary-container text-left bg-surface-container-lowest" data-sheet="dolphin">
+        <div class="w-full h-36 bg-tertiary-fixed/30 flex items-center justify-center text-5xl">🐬</div>
+        <div class="p-3">
+          <h4 class="font-headline-sm text-sm font-bold text-on-surface">Friendly Dolphin Reef</h4>
+          <span class="text-[10px] text-on-surface-variant font-body-sm">Ages 5-9 • Under the Sea</span>
+        </div>
+      </button>
+      <button class="tactile-card rounded-2xl overflow-hidden hover:translate-y-[-4px] transition-all duration-200 cursor-pointer border-2 border-transparent hover:border-primary-container text-left bg-surface-container-lowest" data-sheet="butterfly">
+        <div class="w-full h-36 bg-surface-container flex items-center justify-center text-5xl">🦋</div>
+        <div class="p-3">
+          <h4 class="font-headline-sm text-sm font-bold text-on-surface">Butterfly Garden</h4>
+          <span class="text-[10px] text-on-surface-variant font-body-sm">Ages 4-8 • Nature Scene</span>
+        </div>
+      </button>
+      <button class="tactile-card rounded-2xl overflow-hidden hover:translate-y-[-4px] transition-all duration-200 cursor-pointer border-2 border-transparent hover:border-secondary text-left bg-surface-container-lowest" data-sheet="castle">
+        <div class="w-full h-36 bg-secondary-fixed/30 flex items-center justify-center text-5xl">🏰</div>
+        <div class="p-3">
+          <h4 class="font-headline-sm text-sm font-bold text-on-surface">Magic Castle Kingdom</h4>
+          <span class="text-[10px] text-on-surface-variant font-body-sm">Ages 5-10 • Fantasy</span>
+        </div>
+      </button>
+      <button class="tactile-card rounded-2xl overflow-hidden hover:translate-y-[-4px] transition-all duration-200 cursor-pointer border-2 border-transparent hover:border-tertiary-container text-left bg-surface-container-lowest" data-sheet="lion">
+        <div class="w-full h-36 bg-tertiary-fixed/30 flex items-center justify-center text-5xl">🦁</div>
+        <div class="p-3">
+          <h4 class="font-headline-sm text-sm font-bold text-on-surface">Lion King of the Savanna</h4>
+          <span class="text-[10px] text-on-surface-variant font-body-sm">Ages 4-8 • Wild Animals</span>
+        </div>
+      </button>
+      <button class="tactile-card rounded-2xl overflow-hidden hover:translate-y-[-4px] transition-all duration-200 cursor-pointer border-2 border-transparent hover:border-primary-container text-left bg-surface-container-lowest" data-sheet="unicorn">
+        <div class="w-full h-36 bg-primary-fixed/30 flex items-center justify-center text-5xl">🌈</div>
+        <div class="p-3">
+          <h4 class="font-headline-sm text-sm font-bold text-on-surface">Rainbow Unicorn Dream</h4>
+          <span class="text-[10px] text-on-surface-variant font-body-sm">Ages 4-7 • Fantasy</span>
+        </div>
+      </button>
+      <button class="tactile-card rounded-2xl overflow-hidden hover:translate-y-[-4px] transition-all duration-200 cursor-pointer border-2 border-transparent hover:border-secondary text-left bg-surface-container-lowest" data-sheet="whale">
+        <div class="w-full h-36 bg-secondary-fixed/30 flex items-center justify-center text-5xl">🌊</div>
+        <div class="p-3">
+          <h4 class="font-headline-sm text-sm font-bold text-on-surface">Whale Song Ocean</h4>
+          <span class="text-[10px] text-on-surface-variant font-body-sm">Ages 5-9 • Marine Life</span>
+        </div>
+      </button>
+    </div>
+
+    <div class="text-center max-w-2xl mx-auto mb-10">
+      <span class="text-label-sm font-label-sm font-bold text-primary tracking-wider uppercase px-3 py-1 rounded-full bg-primary-fixed mb-2 inline-block">
+        CREATIVE CANVAS
+      </span>
+      <h2 class="text-headline-lg-mobile md:text-headline-lg font-headline-lg text-on-surface">
+        Free Draw Canvas
+      </h2>
+      <p class="text-body-md font-body-md text-on-surface-variant">
+        Pick any sheet above or start drawing from scratch!
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+      <div class="lg:col-span-8 tactile-card rounded-3xl p-6 custom-floating-shadow" id="canvasPanel">
+        <div class="flex flex-wrap items-center justify-between pb-4 mb-4 border-b border-surface-container gap-3">
+          <div class="flex items-center gap-2">
+            <span class="text-lg" id="sheetEmoji">🦕</span>
+            <span class="font-headline-sm text-headline-sm text-on-surface" id="sheetTitle">Friendly Brontosaurus in the Valley</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <button class="p-2 rounded-xl bg-surface-container hover:bg-surface-container-high text-on-surface-variant text-sm flex items-center gap-1" id="undoBtn" title="Undo">
+              <span class="material-symbols-outlined text-sm">undo</span>
+              <span class="text-xs font-label-sm hidden sm:inline">Undo</span>
+            </button>
+            <button class="p-2 rounded-xl bg-surface-container hover:bg-surface-container-high text-on-surface-variant text-sm flex items-center gap-1" id="clearBtn" title="Reset Canvas">
+              <span class="material-symbols-outlined text-sm">restart_alt</span>
+              <span class="text-xs font-label-sm hidden sm:inline">Reset</span>
+            </button>
+            <button class="px-4 py-2 rounded-full bg-primary-container text-white font-label-sm flex items-center gap-1 shadow-sm active:scale-95 transition-transform" id="saveArtBtn">
+              <span class="material-symbols-outlined text-sm">download</span>
+              <span>Save Artwork</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="relative w-full h-[360px] sm:h-[400px] bg-amber-50/40 rounded-2xl border-2 border-dashed border-outline-variant/60 overflow-hidden flex items-center justify-center cursor-crosshair">
+          <svg class="absolute inset-0 w-full h-full pointer-events-none p-6 opacity-30 stroke-on-surface fill-none" id="sheetTemplate" preserveAspectRatio="xMidYMid meet" viewBox="0 0 500 350">
+            <path d="M 120 280 C 100 240, 110 180, 150 160 C 180 140, 220 150, 260 170 C 300 130, 320 80, 350 70 C 370 65, 390 80, 395 105 C 400 130, 360 170, 360 210 C 420 220, 470 250, 480 290" stroke-linecap="round" stroke-width="6"></path>
+            <circle cx="375" cy="85" fill="#181a2e" r="5"></circle>
+            <path d="M 140 280 L 140 330 M 170 280 L 170 330 M 310 270 L 310 330 M 340 260 L 340 330" stroke-linecap="round" stroke-width="8"></path>
+            <circle cx="80" cy="80" r="30" stroke-width="4"></circle>
+            <path d="M 210 60 C 230 40, 270 40, 290 60 C 300 80, 280 100, 260 100 L 210 100 Z" stroke-width="4"></path>
+          </svg>
+          <img class="absolute inset-0 w-full h-full object-contain pointer-events-none p-4 hidden" id="sheetImage" alt="Coloring sheet">
+          <canvas class="w-full h-full relative z-10 touch-none" id="paintCanvas"></canvas>
+          <div class="absolute bottom-4 left-4 z-20 bg-surface-container-lowest/90 px-3 py-1.5 rounded-full text-xs font-label-sm text-on-surface shadow pointer-events-none flex items-center gap-1.5" id="paintHint">
+            <span>✨ Click & drag on canvas to paint!</span>
+          </div>
+        </div>
+
+        <div class="mt-5 flex flex-wrap items-center justify-between gap-4">
+          <div class="flex items-center gap-2">
+            <span class="text-xs font-label-md text-on-surface-variant font-bold mr-1">Colors:</span>
+            <div class="flex items-center gap-1.5 flex-wrap" id="colorPalette">
+              <button class="color-chip w-8 h-8 rounded-full border-2 border-white shadow-sm ring-2 ring-primary transition-transform scale-110" data-color="#FF6B4A" style="background-color: #FF6B4A;" title="Coral Orange"></button>
+              <button class="color-chip w-8 h-8 rounded-full border-2 border-white shadow-sm hover:scale-105 transition-transform" data-color="#fabc3f" style="background-color: #fabc3f;" title="Sunshine Yellow"></button>
+              <button class="color-chip w-8 h-8 rounded-full border-2 border-white shadow-sm hover:scale-105 transition-transform" data-color="#4EBA87" style="background-color: #4EBA87;" title="Mint Forest"></button>
+              <button class="color-chip w-8 h-8 rounded-full border-2 border-white shadow-sm hover:scale-105 transition-transform" data-color="#4EA8DE" style="background-color: #4EA8DE;" title="Sky Blue"></button>
+              <button class="color-chip w-8 h-8 rounded-full border-2 border-white shadow-sm hover:scale-105 transition-transform" data-color="#9D4EDD" style="background-color: #9D4EDD;" title="Magic Violet"></button>
+              <button class="color-chip w-8 h-8 rounded-full border-2 border-white shadow-sm hover:scale-105 transition-transform" data-color="#FF758F" style="background-color: #FF758F;" title="Sweet Berry"></button>
+              <button class="color-chip w-8 h-8 rounded-full border-2 border-white shadow-sm hover:scale-105 transition-transform" data-color="#FFFFFF" style="background-color: #FFFFFF;" title="White"></button>
+              <button class="color-chip w-8 h-8 rounded-full border-2 border-white shadow-sm hover:scale-105 transition-transform" data-color="#181a2e" style="background-color: #181a2e;" title="Night Charcoal"></button>
+            </div>
+          </div>
+          <div class="flex items-center gap-2 flex-wrap">
+            <span class="text-xs font-label-md text-on-surface-variant font-bold">Tool:</span>
+            <button class="draw-mode-btn px-2.5 py-1 rounded-full bg-primary-container text-white text-xs font-bold flex items-center gap-1" data-mode="free">
+              <span class="material-symbols-outlined text-[14px]">brush</span> Free Draw
+            </button>
+            <button class="draw-mode-btn px-2.5 py-1 rounded-full bg-surface-container text-xs font-bold flex items-center gap-1" data-mode="fill">
+              <span class="material-symbols-outlined text-[14px]">format_color_fill</span> Paint Bucket
+            </button>
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="text-xs font-label-md text-on-surface-variant font-bold">Brush:</span>
+            <button class="brush-size-btn px-2.5 py-1 rounded-full bg-surface-container text-xs font-bold" data-size="4">Small</button>
+            <button class="brush-size-btn px-2.5 py-1 rounded-full bg-primary-container text-white text-xs font-bold" data-size="12">Medium</button>
+            <button class="brush-size-btn px-2.5 py-1 rounded-full bg-surface-container text-xs font-bold" data-size="24">Big</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="lg:col-span-4 flex flex-col gap-4">
+        <span class="text-xs font-label-md font-bold text-on-surface-variant uppercase tracking-wider">Quick Select</span>
+        <button class="tactile-card rounded-2xl p-4 flex items-center gap-4 border-2 border-primary-container/40 bg-surface-container-low cursor-pointer text-left" data-sheet="dino-image">
+          <div class="w-16 h-16 rounded-xl overflow-hidden flex items-center justify-center">
+            <img src="/images/coloring/dinosaur.jpeg" alt="Dinosaur" class="w-full h-full object-cover rounded-xl">
+          </div>
+          <div class="flex-1">
+            <div class="flex items-center gap-1">
+              <span class="text-xs font-bold text-primary font-label-sm">NEW</span>
+            </div>
+            <h4 class="font-headline-sm text-sm font-bold text-on-surface">Dinosaur Adventure</h4>
+            <span class="text-xs text-on-surface-variant font-body-sm">Tap to color</span>
+          </div>
+        </button>
+        <button class="tactile-card rounded-2xl p-4 flex items-center gap-4 hover:border-secondary transition-colors cursor-pointer group text-left" data-sheet="t-rex">
+          <div class="w-16 h-16 rounded-xl bg-primary-fixed flex items-center justify-center text-3xl">🦕</div>
+          <div class="flex-1">
+            <div class="flex items-center gap-1">
+              <span class="text-xs font-bold text-primary font-label-sm">PREVIEW</span>
+            </div>
+            <h4 class="font-headline-sm text-sm font-bold text-on-surface">T-Rex at the Volcano</h4>
+            <span class="text-xs text-on-surface-variant font-body-sm">Tap to color</span>
+          </div>
+        </button>
+        <button class="tactile-card rounded-2xl p-4 flex items-center gap-4 hover:border-secondary transition-colors cursor-pointer group text-left" data-sheet="space-kitty">
+          <div class="w-16 h-16 rounded-xl bg-secondary-fixed flex items-center justify-center text-3xl group-hover:scale-110 transition-transform">🚀</div>
+          <div class="flex-1">
+            <h4 class="font-headline-sm text-sm font-bold text-on-surface">Cosmic Astronaut Kitty</h4>
+            <span class="text-xs text-on-surface-variant font-body-sm">Tap to color</span>
+          </div>
+        </button>
+        <button class="tactile-card rounded-2xl p-4 flex items-center gap-4 hover:border-tertiary-container transition-colors cursor-pointer group text-left" data-sheet="dolphin">
+          <div class="w-16 h-16 rounded-xl bg-tertiary-fixed flex items-center justify-center text-3xl group-hover:scale-110 transition-transform">🐬</div>
+          <div class="flex-1">
+            <h4 class="font-headline-sm text-sm font-bold text-on-surface">Friendly Dolphin Reef</h4>
+            <span class="text-xs text-on-surface-variant font-body-sm">Tap to color</span>
+          </div>
+        </button>
+        <div class="rounded-2xl p-4 bg-tertiary-fixed/40 border border-tertiary-fixed flex items-center gap-3">
+          <span class="material-symbols-outlined text-2xl text-tertiary-container fill-icon" style="font-variation-settings: 'FILL' 1;">military_tech</span>
+          <div class="text-xs text-on-surface">
+            <span class="font-bold">Coloring Quest:</span> Complete 2 drawings today to unlock the <span class="font-bold text-tertiary">Rainbow Brush badge</span>!
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<%- include('partials/parent-zone') %>
+<%- include('partials/footer') %>
+<script src="/js/canvas.js" defer></script>
+</body></html>

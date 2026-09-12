@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: wonderkids
+  labels:
+    app.kubernetes.io/name: wonderkids
+    app.kubernetes.io/part-of: wonderkids

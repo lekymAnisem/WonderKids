@@ -1,0 +1,97 @@
+<%- include('partials/head', { title: title }) %>
+<body class="bg-on-surface text-on-surface antialiased selection:bg-primary-fixed selection:text-on-primary-fixed">
+<%- include('partials/navbar', { progress: progress, activeNav: 'stories' }) %>
+
+<main class="relative min-h-[100svh] overflow-hidden bg-on-surface" id="readerStage">
+  <div class="absolute inset-0 bg-gradient-to-b <%= story.cardGrad %> transition-colors duration-700" id="bgGradient"></div>
+  <div class="absolute -top-24 -right-24 w-96 h-96 bg-white/10 rounded-full blur-3xl pointer-events-none"></div>
+  <div class="absolute bottom-0 -left-24 w-80 h-80 bg-white/10 rounded-full blur-3xl pointer-events-none"></div>
+  <div class="absolute inset-0 flex items-center justify-center pointer-events-none select-none" id="watermarkLayer">
+    <span class="text-[22rem] opacity-10 leading-none" id="watermarkEmoji"><%= story.emoji %></span>
+  </div>
+  <div class="absolute inset-0 pointer-events-none select-none" id="decoLayer"></div>
+  <div class="absolute inset-0 pointer-events-none">
+    <div class="absolute top-1/4 left-1/5 w-24 h-24 bg-white/20 rounded-full blur-2xl"></div>
+    <div class="absolute bottom-1/3 right-1/4 w-16 h-16 bg-white/20 rounded-full blur-xl"></div>
+  </div>
+
+  <div class="relative z-10 flex flex-col min-h-[100svh]">
+    <!-- Top bar -->
+    <div class="flex items-center justify-between px-4 sm:px-6 py-4 max-w-[1240px] mx-auto w-full">
+      <a class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-black/25 text-white font-label-sm font-bold hover:bg-black/40 active:scale-95 transition-all" href="/stories">
+        <span class="material-symbols-outlined text-sm">arrow_back</span>
+        <span class="hidden sm:inline">All Stories</span>
+      </a>
+      <div class="flex items-center gap-2 text-white">
+        <span class="text-xl"><%= story.emoji %></span>
+        <div class="flex flex-col">
+          <span class="text-xs font-label-md font-bold leading-tight sm:hidden"><%= story.title %></span>
+          <span class="text-sm font-label-md font-bold leading-tight hidden sm:block"><%= story.title %></span>
+          <span class="text-[10px] text-white/70 font-body-sm">Lexile <%= story.lexile %>L • <%= story.minutes %> min read</span>
+        </div>
+      </div>
+      <span class="px-3 py-1.5 rounded-full bg-black/25 text-white text-xs font-label-md font-bold" id="pageIndicator">Cover</span>
+    </div>
+
+    <!-- Reader content -->
+    <div class="flex-1 flex items-center justify-center px-4 sm:px-6 py-6" id="readerContent">
+      <div class="w-full max-w-4xl" id="readerCard">
+        <div class="tactile-card rounded-[2rem] overflow-hidden shadow-2xl border-4 border-white/70 bg-surface-container-lowest/95 backdrop-blur-sm">
+          <!-- Image area (shown for pages with images) -->
+          <div id="pageImageContainer" class="relative w-full overflow-hidden" style="display:none;">
+            <img id="pageImage" src="" alt="" class="w-full h-auto max-h-[50vh] object-contain bg-white">
+            <div class="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-surface-container-lowest/95 to-transparent pointer-events-none"></div>
+          </div>
+
+          <div class="p-6 sm:p-10">
+            <div class="flex items-center gap-2 text-secondary font-label-sm font-bold uppercase tracking-wider mb-3">
+              <span class="material-symbols-outlined text-sm fill-icon" style="font-variation-settings: 'FILL' 1;">auto_stories</span>
+              <span id="chapterLabel">WonderKids Storybook</span>
+            </div>
+            <div class="flex items-center justify-center text-7xl mb-2" id="pageEmoji"><%= story.emoji %></div>
+            <div id="pageIllustration"></div>
+            <h1 class="text-headline-lg-mobile md:text-display font-headline-lg md:font-display text-on-surface text-center leading-tight mb-3" id="pageHeading"><%= story.title %></h1>
+            <p class="text-label-sm font-label-sm font-bold text-secondary text-center uppercase tracking-wider mb-4" id="pageSubtitle"><%= story.subtitle %></p>
+            <p class="text-body-lg font-body-lg text-on-surface-variant text-center max-w-2xl mx-auto mb-8 leading-relaxed whitespace-pre-line" id="pageText"><%= story.summary %></p>
+            <div class="flex flex-wrap items-center justify-center gap-2 text-[10px] font-label-sm text-on-surface-variant mb-8" id="coverMeta">
+              <span class="px-3 py-1 rounded-full bg-surface-container font-bold">⭐ <%= story.rating %></span>
+              <span class="px-3 py-1 rounded-full bg-surface-container font-bold">Ages <%= story.ages %></span>
+              <span class="px-3 py-1 rounded-full bg-surface-container font-bold">Lexile <%= story.lexile %>L</span>
+              <span class="px-3 py-1 rounded-full bg-surface-container font-bold"><%= story.pages.length %> pages</span>
+            </div>
+            <div class="flex items-center justify-center gap-3" id="beginSection">
+              <button class="px-8 py-4 rounded-full bg-primary-container text-white font-label-lg font-bold shadow-lg hover:opacity-90 active:scale-95 transition-all" id="beginBtn">Begin Story 🚀</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom controls -->
+    <div class="px-4 sm:px-6 pb-6 pt-2 max-w-[1240px] mx-auto w-full">
+      <div class="w-full bg-white/30 rounded-full h-2.5 overflow-hidden mb-5">
+        <div class="h-full rounded-full bg-primary-container transition-all duration-500" id="progressBar" style="width: 0%;"></div>
+      </div>
+      <div class="flex items-center justify-between gap-3">
+        <button class="px-5 py-3 rounded-full bg-white/90 text-on-surface font-label-md font-bold shadow hover:bg-white active:scale-95 transition-all flex items-center gap-1.5 disabled:opacity-40 disabled:pointer-events-none" id="prevBtn" disabled>
+          <span class="material-symbols-outlined text-sm">arrow_back</span>
+          <span class="hidden sm:inline">Back</span>
+        </button>
+        <button class="w-14 h-14 rounded-full bg-white/90 text-primary-container shadow-lg hover:bg-white active:scale-95 transition-all flex items-center justify-center disabled:opacity-40 disabled:pointer-events-none" id="narrationBtn" aria-pressed="false" title="Read to Me" disabled>
+          <span class="material-symbols-outlined text-2xl fill-icon" style="font-variation-settings: 'FILL' 1;">volume_up</span>
+        </button>
+        <button class="px-8 py-3 rounded-full bg-primary-container text-white font-label-lg font-bold shadow-lg hover:opacity-90 active:scale-95 transition-all flex items-center gap-1.5" id="nextBtn">
+          <span id="nextBtnLabel">Begin</span>
+          <span class="material-symbols-outlined text-sm">arrow_forward</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</main>
+
+<%- include('partials/footer') %>
+
+<script id="wonder-story-data" type="application/json"><%- JSON.stringify(story) %></script>
+<script id="wonder-scenes" type="application/json"><%- JSON.stringify(SCENES) %></script>
+<script src="/js/stories.js" defer></script>
+</body></html>

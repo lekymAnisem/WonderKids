@@ -1,0 +1,7 @@
+repos:
+  - repo: local
+    hooks:
+      - id: gitleaks
+        name: gitleaks
+        entry: gitleaks detect --verbose --redact --no-git
+        language: system

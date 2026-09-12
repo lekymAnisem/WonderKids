@@ -1,0 +1,54 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: wonderkids-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: wonderkids
+      POSTGRES_PASSWORD: wonderkids
+      POSTGRES_DB: wonderkids
+    ports:
+      - '5432:5432'
+    volumes:
+      - wonderkids-pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U wonderkids -d wonderkids']
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: wonderkids-backend
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      NODE_ENV: production
+      PORT: 4000
+      DATABASE_URL: ${DATABASE_URL:-postgresql://wonderkids:wonderkids@postgres:5432/wonderkids?schema=public}
+      DIRECT_URL: ${DIRECT_URL:-postgresql://wonderkids:wonderkids@postgres:5432/wonderkids?schema=public}
+      JWT_SECRET: ${JWT_SECRET:-change-me-access-secret-at-least-32-chars}
+      JWT_REFRESH_SECRET: ${JWT_REFRESH_SECRET:-change-me-refresh-secret-at-least-32-chars}
+      CORS_ORIGIN: ${CORS_ORIGIN:-http://localhost:3000}
+      STORAGE_PROVIDER: ${STORAGE_PROVIDER:-local}
+      S3_ENDPOINT: ${S3_ENDPOINT:-}
+      S3_REGION: ${S3_REGION:-us-east-1}
+      S3_BUCKET: ${S3_BUCKET:-}
+      S3_ACCESS_KEY: ${S3_ACCESS_KEY:-}
+      S3_SECRET_KEY: ${S3_SECRET_KEY:-}
+      S3_PUBLIC_URL: ${S3_PUBLIC_URL:-}
+      GROQ_API_KEY: ${GROQ_API_KEY:-}
+      GROQ_IMAGE_MODEL: ${GROQ_IMAGE_MODEL:-openai/gpt-oss-120b}
+      AI_RATE_LIMIT_MAX: ${AI_RATE_LIMIT_MAX:-5}
+    ports:
+      - '4000:4000'
+    volumes:
+      - wonderkids-uploads:/app/uploads
+
+volumes:
+  wonderkids-pgdata:
+  wonderkids-uploads:
