@@ -22,7 +22,7 @@ pipeline {
         ECR_FRONTEND  = "${APP_NAME_LOWER}-${ENVIRONMENT}-frontend"
 
         IMAGE_TAG    = "${BUILD_NUMBER}"
-        VALUES_FILE  = 'ifra/helm/wonderkids/values.yaml'
+        VALUES_FILE  = 'infra/helm/wonderkids/values.yaml'
 
         SONAR_SERVER = 'Sonarserver'
         SONAR_TOOL   = 'SonarQube'
@@ -246,7 +246,7 @@ pipeline {
                     set +e
                     trivy config --format table --severity HIGH,CRITICAL \
                         --output trivy-config.txt \
-                        backend frontend ifra/k8s ifra/helm ifra/terraform
+                        backend frontend infra/k8s infra/helm infra/terraform
                     echo "Trivy config exit code: $?"
                     exit 0
                 '''
@@ -373,7 +373,7 @@ pipeline {
 
         always {
             archiveArtifacts(
-                artifacts: 'ifra/helm/wonderkids/values.yaml',
+                artifacts: 'infra/helm/wonderkids/values.yaml',
                 allowEmptyArchive: true
             )
 
