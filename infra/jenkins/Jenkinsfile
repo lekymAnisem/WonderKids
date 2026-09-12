@@ -357,8 +357,8 @@ pipeline {
 
                         echo "Updating Helm image tags to ${IMAGE_TAG}"
 
-                        yq -i '.services.backend.image.tag = strenv(IMAGE_TAG)' "$VALUES_FILE"
-                        yq -i '.services.frontend.image.tag = strenv(IMAGE_TAG)' "$VALUES_FILE"
+                        yq -yi '.services.backend.image.tag = strenv(IMAGE_TAG)' "$VALUES_FILE"
+                        yq -yi '.services.frontend.image.tag = strenv(IMAGE_TAG)' "$VALUES_FILE"
 
                         echo "--- Updated Helm image values ---"
                         yq '.services.*.image' "$VALUES_FILE"
