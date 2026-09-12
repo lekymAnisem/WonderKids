@@ -357,11 +357,18 @@ pipeline {
 
                         echo "Updating Helm image tags to ${IMAGE_TAG}"
 
-                        yq -yi '.services.backend.image.tag = strenv(IMAGE_TAG)' "$VALUES_FILE"
-                        yq -yi '.services.frontend.image.tag = strenv(IMAGE_TAG)' "$VALUES_FILE"
+                        set_image_tag() {
+                            expr='.services.'"$1"'.image.tag = "'"$IMAGE_TAG"'"'
+                            yq -y "$expr" "$VALUES_FILE" > "$VALUES_FILE.tmp"
+                            mv "$VALUES_FILE.tmp" "$VALUES_FILE"
+                        }
+
+                        set_image_tag backend
+                        set_image_tag frontend
 
                         echo "--- Updated Helm image values ---"
-                        yq '.services.*.image' "$VALUES_FILE"
+                        yq -y '.services.backend.image.tag' "$VALUES_FILE"
+                        yq -y '.services.frontend.image.tag' "$VALUES_FILE"
 
                         git config user.name "Jenkins CI"
                         git config user.email "jenkins@wonderkids.local"
