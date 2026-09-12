@@ -8,7 +8,6 @@ metadata:
 data:
   # Backend
   NODE_ENV: production
-  PORT: "4000"
   CORS_ORIGIN: "*"
   SEED_ON_BOOT: "true"
   MIGRATIONS_ON_BOOT: "true"

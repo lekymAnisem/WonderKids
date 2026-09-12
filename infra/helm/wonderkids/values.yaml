@@ -19,7 +19,6 @@ secrets:
     serviceAccountNamespace: external-secrets
 config:
   NODE_ENV: production
-  PORT: '4000'
   FRONTEND_PORT: '3000'
   CORS_ORIGIN: '*'
   SESSION_SECRET: wonderkids_fallback_secret
