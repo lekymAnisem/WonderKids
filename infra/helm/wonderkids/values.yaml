@@ -126,8 +126,13 @@ metrics:
   path: /metrics
   interval: 30s
   scrapeTimeout: 10s
+  # ServiceMonitor is a Prometheus Operator CRD (monitoring.coreos.com/v1).
+  # Metrics are scraped by the standalone Prometheus on the monitoring EC2
+  # instance via static_configs, which does not read ServiceMonitor objects.
+  # Enabling this makes Argo CD fail the whole sync with
+  # "failed to discover server resources for group version monitoring.coreos.com/v1".
   serviceMonitor:
-    enabled: true
+    enabled: false
     labels:
       release: monitoring
 serviceAccount:
