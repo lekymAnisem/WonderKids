@@ -332,55 +332,50 @@ pipeline {
 
         stage('Update Helm Image Tags') {
             steps {
-                withCredentials([
-                    usernamePassword(
-                        credentialsId: 'github-token',
-                        usernameVariable: 'GIT_USERNAME',
-                        passwordVariable: 'GIT_TOKEN'
-                    )
-                ]) {
-                    sh '''
-                        set -e
+        withCredentials([
+            usernamePassword(
+                credentialsId: 'github-token',
+                usernameVariable: 'GIT_USER',
+                passwordVariable: 'GIT_TOKEN'
+            )
+        ]) {
+            sh '''
+                set -e
 
-                        test -f "$VALUES_FILE" || {
-                            echo "ERROR: $VALUES_FILE not found"
-                            exit 1
-                        }
-
-                        echo "Updating Helm image tags to ${IMAGE_TAG}"
-
-                        # Robust update strategy: Try yq (v4+ or v3), fallback to sed
-                        if command -v yq >/dev/null 2>&1; then
-                            yq eval -i ".services.backend.image.tag = \\"${IMAGE_TAG}\\"" "$VALUES_FILE" 2>/dev/null || \
-                            yq -i ".services.backend.image.tag = \\"${IMAGE_TAG}\\"" "$VALUES_FILE" 2>/dev/null || \
-                            sed -i -E "s/(backend:.*tag: ).*/\\1\\"${IMAGE_TAG}\\"/" "$VALUES_FILE"
-
-                            yq eval -i ".services.frontend.image.tag = \\"${IMAGE_TAG}\\"" "$VALUES_FILE" 2>/dev/null || \
-                            yq -i ".services.frontend.image.tag = \\"${IMAGE_TAG}\\"" "$VALUES_FILE" 2>/dev/null || \
-                            sed -i -E "s/(frontend:.*tag: ).*/\\1\\"${IMAGE_TAG}\\"/" "$VALUES_FILE"
-                        else
-                            echo "yq not found. Fallback to sed replacement..."
-                            sed -i -E "s/(tag: ).*/\\1\\"${IMAGE_TAG}\\"/" "$VALUES_FILE"
-                        fi
-
-                        echo "--- Updated Helm values preview ---"
-                        cat "$VALUES_FILE"
-
-                        git config user.name "Jenkins CI"
-                        git config user.email "jenkins@wonderkids.local"
-                        git add "$VALUES_FILE"
-
-                        if git diff --cached --quiet; then
-                            echo "No Helm values changes detected."
-                            exit 0
-                        fi
-
-                        git commit -m "chore(gitops): deploy build ${BUILD_NUMBER} [skip ci]"
-                        git push "https://${GIT_TOKEN}@github.com/lekymAnisem/WonderKids.git" HEAD:main
-                    '''
+                test -f "$VALUES_FILE" || {
+                    echo "ERROR: $VALUES_FILE not found"
+                    exit 1
                 }
-            }
+
+                echo "Updating Helm image tags to ${IMAGE_TAG} in ${VALUES_FILE}"
+
+                # Update tags using mikefarah/yq v4 syntax
+                yq eval -i ".services.backend.image.tag = \"${IMAGE_TAG}\"" "$VALUES_FILE"
+                yq eval -i ".services.frontend.image.tag = \"${IMAGE_TAG}\"" "$VALUES_FILE"
+
+                echo "--- Updated Helm values ---"
+                yq eval '.services.backend.image.tag' "$VALUES_FILE"
+                yq eval '.services.frontend.image.tag' "$VALUES_FILE"
+
+                # Configure Git identity
+                git config user.name "Jenkins CI"
+                git config user.email "jenkins@wonderkids.local"
+
+                git add "$VALUES_FILE"
+
+                if git diff --cached --quiet; then
+                    echo "No Helm values changes detected."
+                    exit 0
+                fi
+
+                git commit -m "chore(gitops): deploy build ${BUILD_NUMBER} [skip ci]"
+                
+                # Push using Personal Access Token
+                git push "https://${GIT_TOKEN}@github.com/lekymAnisem/WonderKids.git" HEAD:main
+            '''
         }
+    }
+}
     }
 
     post {
