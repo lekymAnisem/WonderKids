@@ -197,17 +197,36 @@ pipeline {
                                             // not JSON, fall through to dotenv
                                         }
 
-                                        const body = text.replace(/^\{/, "").replace(/\}$/, "");
+                                        const NL = String.fromCharCode(10);
+                                        const HASH = String.fromCharCode(35);
+                                        const DQUOTE = String.fromCharCode(34);
+                                        const SQUOTE = String.fromCharCode(39);
+                                        const isQuote = (c) => c === DQUOTE || c === SQUOTE;
+
+                                        let body = text;
+                                        if (body.charAt(0) === "{") body = body.slice(1);
+                                        if (body.charAt(body.length - 1) === "}") {
+                                            body = body.slice(0, body.length - 1);
+                                        }
+
                                         const data = {};
                                         let found = false;
 
-                                        for (const line of body.split("\n")) {
+                                        for (const line of body.split(NL)) {
                                             const trimmed = line.trim();
-                                            if (!trimmed || trimmed.startsWith("#")) continue;
+                                            if (!trimmed || trimmed.charAt(0) === HASH) continue;
+
                                             const eq = trimmed.indexOf("=");
                                             if (eq < 1) continue;
-                                            const key = trimmed.slice(0, eq).trim().replace(/^["\x27]|["\x27]$/g, "");
+
+                                            let key = trimmed.slice(0, eq).trim();
+                                            if (key.length > 1
+                                                    && isQuote(key.charAt(0))
+                                                    && isQuote(key.charAt(key.length - 1))) {
+                                                key = key.slice(1, key.length - 1).trim();
+                                            }
                                             if (!key) continue;
+
                                             data[key] = trimmed.slice(eq + 1).trim();
                                             found = true;
                                         }
@@ -236,19 +255,16 @@ pipeline {
                                     '
 
                                     read_secret() {
-                                        printf '%s' "$SECRET_JSON" \
-                                            | WK_SECRET_MODE=value WK_SECRET_KEY="$1" node -e "$PARSER_JS"
+                                        printf '%s' "$SECRET_JSON" | WK_SECRET_MODE=value WK_SECRET_KEY="$1" node -e "$PARSER_JS"
                                     }
 
                                     # Key names only, never values, for diagnostics.
                                     secret_keys() {
-                                        printf '%s' "$SECRET_JSON" \
-                                            | WK_SECRET_MODE=keys node -e "$PARSER_JS"
+                                        printf '%s' "$SECRET_JSON" | WK_SECRET_MODE=keys node -e "$PARSER_JS"
                                     }
 
                                     secret_format() {
-                                        printf '%s' "$SECRET_JSON" \
-                                            | WK_SECRET_MODE=format node -e "$PARSER_JS"
+                                        printf '%s' "$SECRET_JSON" | WK_SECRET_MODE=format node -e "$PARSER_JS"
                                     }
 
                                     # Trim whitespace and quotes a hand-edited secret
