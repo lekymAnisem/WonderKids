@@ -170,10 +170,61 @@ pipeline {
                                         exit 0
                                     fi
 
-                                    test -n "$TEST_DATABASE_URL" || {
+                                    # Strip whitespace and quotes a pasted secret often
+                                    # carries; Prisma rejects the whole URL otherwise.
+                                    TEST_DATABASE_URL=$(printf '%s' "$TEST_DATABASE_URL" \
+                                        | tr -d '\r' \
+                                        | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//' \
+                                              -e 's/^"//' -e 's/"$//')
+
+                                    # Describe a bad URL without ever printing the
+                                    # password. Only the scheme and the host (the text
+                                    # after the last @) are safe to show, so anything
+                                    # else is reported as a placeholder.
+                                    describe_url() {
+                                        case "$1" in
+                                            *@*) ;;
+                                            *)
+                                                printf '<no host> (length %s)' "${#1}"
+                                                return
+                                                ;;
+                                        esac
+
+                                        SCHEME=$(printf '%s' "$1" \
+                                            | sed -nE 's#^([a-zA-Z0-9+.-]+)://.*#\1#p')
+                                        [ -n "$SCHEME" ] || SCHEME="none"
+
+                                        HOST=$(printf '%s' "$1" \
+                                            | sed -E 's#^[a-zA-Z0-9+.-]+://##; s#^.*@##; s#/.*##')
+
+                                        printf 'scheme=%s host=%s' "$SCHEME" "$HOST"
+                                    }
+
+                                    if [ -z "$TEST_DATABASE_URL" ]; then
                                         echo "ERROR: credential 'test-database-url' is empty"
                                         exit 1
-                                    }
+                                    fi
+
+                                    case "$TEST_DATABASE_URL" in
+                                        postgresql://*|postgres://*) ;;
+                                        *)
+                                            echo "ERROR: 'test-database-url' is not a Postgres URL."
+                                            echo "       Expected: postgresql://USER:PASSWORD@HOST:5432/DB?sslmode=require"
+                                            echo "       Got:      $(describe_url "$TEST_DATABASE_URL")"
+                                            exit 1
+                                            ;;
+                                    esac
+
+                                    case "$TEST_DATABASE_URL" in
+                                        *@*/*) ;;
+                                        *)
+                                            echo "ERROR: 'test-database-url' has no host and database."
+                                            echo "       Got: $(describe_url "$TEST_DATABASE_URL")"
+                                            exit 1
+                                            ;;
+                                    esac
+
+                                    echo "Using test database at $(describe_url "$TEST_DATABASE_URL")"
 
                                     export DATABASE_URL="$TEST_DATABASE_URL"
                                     export DIRECT_URL="$TEST_DATABASE_URL"
