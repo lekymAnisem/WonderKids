@@ -152,16 +152,7 @@ pipeline {
                 stage('Backend Tests') {
                     steps {
                         dir('backend') {
-                            // Test DB credentials live in Jenkins, not in AWS Secrets
-                            // Manager. Create a Secret text credential holding the
-                            // Neon connection string, e.g. id 'test-database-url'.
-                            // Prisma needs a non-pooler connection to reset the schema.
-                            withCredentials([
-                                string(
-                                    credentialsId: 'test-database-url',
-                                    variable: 'TEST_DATABASE_URL'
-                                )
-                            ]) {
+                            withAWS(credentials: 'aws-creds', region: 'ap-southeast-2') {
                                 sh '''
                                     set +x
 
@@ -170,12 +161,59 @@ pipeline {
                                         exit 0
                                     fi
 
-                                    # Strip whitespace and quotes a pasted secret often
-                                    # carries; Prisma rejects the whole URL otherwise.
-                                    TEST_DATABASE_URL=$(printf '%s' "$TEST_DATABASE_URL" \
-                                        | tr -d '\r' \
-                                        | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//' \
-                                              -e 's/^"//' -e 's/"$//')
+                                    if ! SECRET_JSON=$(aws secretsmanager get-secret-value \
+                                            --secret-id wonderkids-secrets \
+                                            --query SecretString --output text); then
+                                        echo "ERROR: cannot read secret 'wonderkids-secrets' from AWS Secrets Manager"
+                                        exit 1
+                                    fi
+
+                                    # Parse with node instead of grep. The previous
+                                    # grep -o '"KEY"[^,]*' stopped at the first comma in
+                                    # the value and returned an empty string with no
+                                    # error, which surfaced as a Prisma P1013. node is
+                                    # already required by the npm test step below, so
+                                    # this adds no new dependency to the agent.
+                                    read_secret() {
+                                        printf '%s' "$SECRET_JSON" | node -e '
+                                            let raw = "";
+                                            process.stdin
+                                                .on("data", (chunk) => (raw += chunk))
+                                                .on("end", () => {
+                                                    try {
+                                                        const secret = JSON.parse(raw);
+                                                        process.stdout.write(String(secret[process.argv[1]] ?? ""));
+                                                    } catch {
+                                                        process.exit(1);
+                                                    }
+                                                });
+                                        ' "$1"
+                                    }
+
+                                    # Key names only, never values, for diagnostics.
+                                    secret_keys() {
+                                        printf '%s' "$SECRET_JSON" | node -e '
+                                            let raw = "";
+                                            process.stdin
+                                                .on("data", (chunk) => (raw += chunk))
+                                                .on("end", () => {
+                                                    try {
+                                                        process.stdout.write(Object.keys(JSON.parse(raw)).join(", "));
+                                                    } catch {
+                                                        process.exit(1);
+                                                    }
+                                                });
+                                        '
+                                    }
+
+                                    # Trim whitespace and quotes a hand-edited secret
+                                    # often carries; Prisma rejects the whole URL.
+                                    normalize_url() {
+                                        printf '%s' "$1" \
+                                            | tr -d '\r' \
+                                            | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//' \
+                                                  -e 's/^"//' -e 's/"$//'
+                                    }
 
                                     # Describe a bad URL without ever printing the
                                     # password. Only the scheme and the host (the text
@@ -200,35 +238,45 @@ pipeline {
                                         printf 'scheme=%s host=%s' "$SCHEME" "$HOST"
                                     }
 
-                                    if [ -z "$TEST_DATABASE_URL" ]; then
-                                        echo "ERROR: credential 'test-database-url' is empty"
+                                    validate_url() {
+                                        case "$2" in
+                                            postgresql://*|postgres://*) ;;
+                                            *)
+                                                echo "ERROR: $1 in 'wonderkids-secrets' is not a Postgres URL."
+                                                echo "       Expected: postgresql://USER:PASSWORD@HOST:5432/DB?sslmode=require"
+                                                echo "       Got:      $(describe_url "$2")"
+                                                return 1
+                                                ;;
+                                        esac
+
+                                        case "$2" in
+                                            *@*/*) ;;
+                                            *)
+                                                echo "ERROR: $1 in 'wonderkids-secrets' has no host and database."
+                                                echo "       Got: $(describe_url "$2")"
+                                                return 1
+                                                ;;
+                                        esac
+                                    }
+
+                                    DATABASE_URL=$(normalize_url "$(read_secret DATABASE_URL)")
+                                    DIRECT_URL=$(normalize_url "$(read_secret DIRECT_URL)")
+
+                                    test -n "$DIRECT_URL" || DIRECT_URL="$DATABASE_URL"
+                                    test -n "$DATABASE_URL" || DATABASE_URL="$DIRECT_URL"
+
+                                    if [ -z "$DIRECT_URL" ]; then
+                                        echo "ERROR: 'wonderkids-secrets' has no usable DATABASE_URL or DIRECT_URL."
+                                        echo "       Keys present: $(secret_keys)"
                                         exit 1
                                     fi
 
-                                    case "$TEST_DATABASE_URL" in
-                                        postgresql://*|postgres://*) ;;
-                                        *)
-                                            echo "ERROR: 'test-database-url' is not a Postgres URL."
-                                            echo "       Expected: postgresql://USER:PASSWORD@HOST:5432/DB?sslmode=require"
-                                            echo "       Got:      $(describe_url "$TEST_DATABASE_URL")"
-                                            exit 1
-                                            ;;
-                                    esac
+                                    validate_url DIRECT_URL "$DIRECT_URL" || exit 1
+                                    validate_url DATABASE_URL "$DATABASE_URL" || exit 1
 
-                                    case "$TEST_DATABASE_URL" in
-                                        *@*/*) ;;
-                                        *)
-                                            echo "ERROR: 'test-database-url' has no host and database."
-                                            echo "       Got: $(describe_url "$TEST_DATABASE_URL")"
-                                            exit 1
-                                            ;;
-                                    esac
+                                    echo "Using test database at $(describe_url "$DIRECT_URL")"
 
-                                    echo "Using test database at $(describe_url "$TEST_DATABASE_URL")"
-
-                                    export DATABASE_URL="$TEST_DATABASE_URL"
-                                    export DIRECT_URL="$TEST_DATABASE_URL"
-
+                                    export DATABASE_URL DIRECT_URL
                                     set -x
                                     npm test
                                 '''
