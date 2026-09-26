@@ -332,50 +332,101 @@ pipeline {
 
         stage('Update Helm Image Tags') {
             steps {
-        withCredentials([
-            usernamePassword(
-                credentialsId: 'github-token',
-                usernameVariable: 'GIT_USER',
-                passwordVariable: 'GIT_TOKEN'
-            )
-        ]) {
-            sh '''
-                set -e
+                withCredentials([
+                    usernamePassword(
+                        credentialsId: 'github-token',
+                        usernameVariable: 'GIT_USER',
+                        passwordVariable: 'GIT_TOKEN'
+                    )
+                ]) {
+                    sh '''
+                        set -e
 
-                test -f "$VALUES_FILE" || {
-                    echo "ERROR: $VALUES_FILE not found"
-                    exit 1
+                        test -f "$VALUES_FILE" || {
+                            echo "ERROR: $VALUES_FILE not found"
+                            exit 1
+                        }
+
+                        echo "Updating Helm image tags to ${IMAGE_TAG} in ${VALUES_FILE}"
+
+                        # Only mikefarah/yq v4 understands 'eval -i'. Other yq builds
+                        # (e.g. the python/jq wrapper) must fall through to awk.
+                        YQ_BIN=""
+                        if command -v yq >/dev/null 2>&1 && yq --version 2>/dev/null | grep -q "mikefarah"; then
+                            YQ_BIN="yq eval"
+                        fi
+
+                        if [ -n "$YQ_BIN" ]; then
+                            echo "Using mikefarah/yq: $(yq --version)"
+                            for SERVICE in backend frontend; do
+                                $YQ_BIN -i ".services.${SERVICE}.image.tag = \"${IMAGE_TAG}\"" "$VALUES_FILE"
+                            done
+
+                            echo "--- Updated Helm image tags ---"
+                            for SERVICE in backend frontend; do
+                                echo "${SERVICE}: $($YQ_BIN ".services.${SERVICE}.image.tag" "$VALUES_FILE")"
+                            done
+                        else
+                            echo "WARNING: mikefarah/yq v4 not available on this agent; using awk fallback"
+
+                            # Only safe while values.yaml holds exactly two image tags
+                            # at the services.<name>.image.tag indent. Validate BEFORE
+                            # rewriting so an unrelated tag: key can never be clobbered.
+                            TOTAL_TAGS=$(grep -cE '^[[:space:]]*tag:' "$VALUES_FILE" || true)
+                            IMAGE_TAGS=$(grep -cE '^      tag: ' "$VALUES_FILE" || true)
+                            if [ "${TOTAL_TAGS}" -ne 2 ] || [ "${IMAGE_TAGS}" -ne 2 ]; then
+                                echo "ERROR: expected exactly 2 image tags at 6-space indent,"
+                                echo "       found ${IMAGE_TAGS}/${TOTAL_TAGS} in ${VALUES_FILE}."
+                                echo "       Install mikefarah/yq v4 on this agent, or update the awk fallback."
+                                exit 1
+                            fi
+
+                            SQ="'"
+                            awk -v tag="${IMAGE_TAG}" -v q="${SQ}" '
+                                /^      tag:/ {
+                                    print "      tag: " q tag q
+                                    next
+                                }
+                                { print }
+                            ' "$VALUES_FILE" > "${VALUES_FILE}.tmp"
+                            mv "${VALUES_FILE}.tmp" "$VALUES_FILE"
+
+                            UPDATED=$(grep -cE "^      tag: '${IMAGE_TAG}'\$" "$VALUES_FILE" || true)
+                            if [ "${UPDATED}" -ne 2 ]; then
+                                echo "ERROR: expected 2 image tags set to ${IMAGE_TAG}, found ${UPDATED}"
+                                exit 1
+                            fi
+                        fi
+
+                        grep -nE '^[[:space:]]*tag:' "$VALUES_FILE" || true
+
+                        # Configure Git identity
+                        git config user.name "Jenkins CI"
+                        git config user.email "jenkins@wonderkids.local"
+
+                        git add "$VALUES_FILE"
+
+                        if git diff --cached --quiet; then
+                            echo "No Helm values changes detected."
+                            exit 0
+                        fi
+
+                        git commit -m "chore(gitops): deploy build ${BUILD_NUMBER} [skip ci]"
+
+                        # Rebase onto any commits landed on main since checkout so the
+                        # push is never rejected as non-fast-forward.
+                        git fetch origin
+                        git rebase origin/main || {
+                            echo "ERROR: rebase onto origin/main failed - resolve manually"
+                            exit 1
+                        }
+
+                        # Push using Personal Access Token
+                        git push "https://${GIT_USER}:${GIT_TOKEN}@github.com/lekymAnisem/WonderKids.git" HEAD:main
+                    '''
                 }
-
-                echo "Updating Helm image tags to ${IMAGE_TAG} in ${VALUES_FILE}"
-
-                # Update tags using mikefarah/yq v4 syntax
-                yq eval -i ".services.backend.image.tag = \"${IMAGE_TAG}\"" "$VALUES_FILE"
-                yq eval -i ".services.frontend.image.tag = \"${IMAGE_TAG}\"" "$VALUES_FILE"
-
-                echo "--- Updated Helm values ---"
-                yq eval '.services.backend.image.tag' "$VALUES_FILE"
-                yq eval '.services.frontend.image.tag' "$VALUES_FILE"
-
-                # Configure Git identity
-                git config user.name "Jenkins CI"
-                git config user.email "jenkins@wonderkids.local"
-
-                git add "$VALUES_FILE"
-
-                if git diff --cached --quiet; then
-                    echo "No Helm values changes detected."
-                    exit 0
-                fi
-
-                git commit -m "chore(gitops): deploy build ${BUILD_NUMBER} [skip ci]"
-                
-                # Push using Personal Access Token
-                git push "https://${GIT_TOKEN}@github.com/lekymAnisem/WonderKids.git" HEAD:main
-            '''
+            }
         }
-    }
-}
     }
 
     post {
