@@ -333,10 +333,9 @@ pipeline {
         stage('Update Helm Image Tags') {
             steps {
                 withCredentials([
-                    usernamePassword(
+                    string(
                         credentialsId: 'github-token',
-                        usernameVariable: 'GIT_USER',
-                        passwordVariable: 'GIT_TOKEN'
+                        variable: 'GIT_TOKEN'
                     )
                 ]) {
                     sh '''
@@ -421,8 +420,14 @@ pipeline {
                             exit 1
                         }
 
-                        # Push using Personal Access Token
-                        git push "https://${GIT_USER}:${GIT_TOKEN}@github.com/lekymAnisem/WonderKids.git" HEAD:main
+                        # Push using the Personal Access Token. 'github-token' is a
+                        # Secret text credential, so there is no username to pair with
+                        # it - x-access-token is the username GitHub expects for PATs.
+                        # GIT_TERMINAL_PROMPT=0 stops git from hanging on a prompt if
+                        # the token is ever rejected.
+                        GIT_TERMINAL_PROMPT=0 git push \
+                            "https://x-access-token:${GIT_TOKEN}@github.com/lekymAnisem/WonderKids.git" \
+                            HEAD:main
                     '''
                 }
             }
