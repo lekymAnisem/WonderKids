@@ -7,21 +7,31 @@ global:
   configMapName: wonderkids-config
   existingSecretName: wonderkids-secrets
 secrets:
+  # The Secret is created out-of-band, never by this chart, so no credential is
+  # ever committed to git. Deployments mount it via envFrom (see deployments.yaml).
+  #
+  # One-time creation per cluster:
+  #   kubectl -n wonderkids create secret generic wonderkids-secrets \
+  #     --from-literal=DATABASE_URL='postgresql://...' \
+  #     --from-literal=DIRECT_URL='postgresql://...' \
+  #     --from-literal=JWT_SECRET="$(openssl rand -hex 32)" \
+  #     --from-literal=JWT_REFRESH_SECRET="$(openssl rand -hex 32)" \
+  #     --from-literal=SESSION_SECRET="$(openssl rand -hex 32)" \
+  #     --from-literal=ADMIN_EMAIL='admin@example.com' \
+  #     --from-literal=ADMIN_PASSWORD='...' \
+  #     --from-literal=GROQ_API_KEY='...' \
+  #     --from-literal=S3_ACCESS_KEY='...' \
+  #     --from-literal=S3_SECRET_KEY='...'
+  #
+  # Non-sensitive settings belong in the config map below or in
+  # services.<name>.envVars, not here. Both are mounted through envFrom, so the
+  # Secret must not redefine PORT: the two services need different ports.
   create: false
   existingSecretName: wonderkids-secrets
-  externalSecret:
-    enabled: false
-    storeName: wonderkids-aws-secrets-manager
-    remoteKey: wonderkids-secrets
-    region: ap-southeast-2
-    refreshInterval: 1h
-    serviceAccountName: external-secrets
-    serviceAccountNamespace: external-secrets
 config:
   NODE_ENV: production
   FRONTEND_PORT: '3000'
   CORS_ORIGIN: '*'
-  SESSION_SECRET: ""
   BACKEND_SERVICE: backend
   FRONTEND_SERVICE: frontend
 services:

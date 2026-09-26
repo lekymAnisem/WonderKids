@@ -152,27 +152,34 @@ pipeline {
                 stage('Backend Tests') {
                     steps {
                         dir('backend') {
-                            withAWS(credentials: 'aws-creds', region: 'ap-southeast-2') {
+                            // Test DB credentials live in Jenkins, not in AWS Secrets
+                            // Manager. Create a Secret text credential holding the
+                            // Neon connection string, e.g. id 'test-database-url'.
+                            // Prisma needs a non-pooler connection to reset the schema.
+                            withCredentials([
+                                string(
+                                    credentialsId: 'test-database-url',
+                                    variable: 'TEST_DATABASE_URL'
+                                )
+                            ]) {
                                 sh '''
                                     set +x
-                                    if npm run 2>/dev/null | grep -q "test"; then
-                                        SECRET_JSON=$(aws secretsmanager get-secret-value \
-                                            --secret-id wonderkids-secrets \
-                                            --query SecretString --output text)
 
-                                        # Parse secrets without echoing commands to logs
-                                        DATABASE_URL=$(echo "$SECRET_JSON" | grep -o '"DATABASE_URL"[^,]*' | cut -d'"' -f4)
-                                        DIRECT_URL=$(echo "$SECRET_JSON" | grep -o '"DIRECT_URL"[^,]*' | cut -d'"' -f4)
-
-                                        test -n "$DIRECT_URL" || DIRECT_URL="$DATABASE_URL"
-                                        test -n "$DATABASE_URL" || DATABASE_URL="$DIRECT_URL"
-
-                                        export DATABASE_URL DIRECT_URL
-                                        set -x
-                                        npm test
-                                    else
+                                    if ! npm run 2>/dev/null | grep -q "test"; then
                                         echo "No test script configured"
+                                        exit 0
                                     fi
+
+                                    test -n "$TEST_DATABASE_URL" || {
+                                        echo "ERROR: credential 'test-database-url' is empty"
+                                        exit 1
+                                    }
+
+                                    export DATABASE_URL="$TEST_DATABASE_URL"
+                                    export DIRECT_URL="$TEST_DATABASE_URL"
+
+                                    set -x
+                                    npm test
                                 '''
                             }
                         }
