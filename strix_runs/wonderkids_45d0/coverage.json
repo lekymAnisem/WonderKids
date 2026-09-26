@@ -1,0 +1,64 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-09-20 14:12:23 UTC",
+  "run_id": "wonderkids_45d0",
+  "run_name": "wonderkids_45d0",
+  "scope": {
+    "targets": [
+      {
+        "type": "local_code",
+        "details": {
+          "target_path": "/Users/lekym/Documents/WonderKids",
+          "workspace_subdir": "WonderKids"
+        },
+        "original": "/Users/lekym/Documents/WonderKids"
+      }
+    ],
+    "scan_mode": "quick",
+    "scope_mode": "auto",
+    "diff_scope": {
+      "active": false,
+      "mode": "auto"
+    },
+    "instruction": ""
+  },
+  "summary": {
+    "surfaces_reviewed": 0,
+    "outcomes": {},
+    "findings_filed": 0,
+    "gaps": 1
+  },
+  "machine_observed": {
+    "agents": [
+      {
+        "agent_id": "5edb3907",
+        "agent_name": "Root Agent",
+        "status": "running",
+        "skills": [],
+        "task": "\n\nLocal Codebases: - /Users/lekym/Documents/WonderKids (available at: /workspace/WonderKids; this is the user's real directory, mounted live and writable — .git/.agents/.codex are read-only)",
+        "is_root": true
+      }
+    ],
+    "skills_exercised": [],
+    "findings_filed": 0,
+    "source": "runtime"
+  },
+  "completeness": {
+    "complete": false,
+    "scan_status": "interrupted",
+    "exit_reason": "user_exit",
+    "caveats": [
+      "The scan ended with status 'interrupted' rather than completing, so coverage reflects only the work finished before it stopped.",
+      "1 agent(s) did not finish cleanly (Root Agent); any surface they held is under-covered.",
+      "The run terminated via 'user_exit' rather than the root agent finishing, so remaining scope was not reached."
+    ]
+  },
+  "entries": [],
+  "gaps": [
+    {
+      "kind": "agent_recorded_no_coverage",
+      "agent_name": "Root Agent",
+      "detail": "Root Agent ran (status: running) without recording any coverage. Whatever it examined is absent from this record."
+    }
+  ]
+}

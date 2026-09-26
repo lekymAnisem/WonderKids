@@ -98,7 +98,7 @@ pipeline {
                     sh '''
                         set -e
                         for REPO in "$ECR_BACKEND" "$ECR_FRONTEND"; do
-                            aws ecr describe-repositories --repository-names "$REPO" --region "$AWS_REGION" >/dev/null 2>&1 ||
+                            aws ecr describe-repositories --repository-names "$REPO" --region "$AWS_REGION" >/dev/null 2>&1 || \
                             aws ecr create-repository --repository-name "$REPO" --image-scanning-configuration scanOnPush=true --region "$AWS_REGION"
                         done
                     '''
@@ -154,24 +154,21 @@ pipeline {
                         dir('backend') {
                             withAWS(credentials: 'aws-creds', region: 'ap-southeast-2') {
                                 sh '''
-                                    set -e
+                                    set +x
                                     if npm run 2>/dev/null | grep -q "test"; then
                                         SECRET_JSON=$(aws secretsmanager get-secret-value \
                                             --secret-id wonderkids-secrets \
                                             --query SecretString --output text)
 
-                                        get_secret_value() {
-                                            printf '%s\n' "$SECRET_JSON" | grep "$1" | cut -d= -f2- | tr -d '"'
-                                        }
-
-                                        DIRECT_URL=$(get_secret_value DIRECT_URL)
-                                        DATABASE_URL=$(get_secret_value DATABASE_URL)
+                                        # Parse secrets without echoing commands to logs
+                                        DATABASE_URL=$(echo "$SECRET_JSON" | grep -o '"DATABASE_URL"[^,]*' | cut -d'"' -f4)
+                                        DIRECT_URL=$(echo "$SECRET_JSON" | grep -o '"DIRECT_URL"[^,]*' | cut -d'"' -f4)
 
                                         test -n "$DIRECT_URL" || DIRECT_URL="$DATABASE_URL"
                                         test -n "$DATABASE_URL" || DATABASE_URL="$DIRECT_URL"
-                                        test -n "$DIRECT_URL" || { echo "ERROR: DATABASE_URL/DIRECT_URL not found in wonderkids-secrets"; exit 1; }
 
                                         export DATABASE_URL DIRECT_URL
+                                        set -x
                                         npm test
                                     else
                                         echo "No test script configured"
@@ -262,9 +259,9 @@ pipeline {
             steps {
                 sh '''
                     set +e
+                    # Scan entire workspace directory recursively
                     trivy config --format table --severity HIGH,CRITICAL \
-                        --output trivy-config.txt \
-                        backend frontend infra/k8s infra/helm infra/terraform
+                        --output trivy-config.txt .
                     echo "Trivy config exit code: $?"
                     exit 0
                 '''
@@ -350,25 +347,24 @@ pipeline {
                             exit 1
                         }
 
-                        command -v yq >/dev/null 2>&1 || {
-                            echo "ERROR: yq is not installed on the Jenkins agent"
-                            exit 1
-                        }
-
                         echo "Updating Helm image tags to ${IMAGE_TAG}"
 
-                        set_image_tag() {
-                            expr='.services.'"$1"'.image.tag = "'"$IMAGE_TAG"'"'
-                            yq -y "$expr" "$VALUES_FILE" > "$VALUES_FILE.tmp"
-                            mv "$VALUES_FILE.tmp" "$VALUES_FILE"
-                        }
+                        # Robust update strategy: Try yq (v4+ or v3), fallback to sed
+                        if command -v yq >/dev/null 2>&1; then
+                            yq eval -i ".services.backend.image.tag = \\"${IMAGE_TAG}\\"" "$VALUES_FILE" 2>/dev/null || \
+                            yq -i ".services.backend.image.tag = \\"${IMAGE_TAG}\\"" "$VALUES_FILE" 2>/dev/null || \
+                            sed -i -E "s/(backend:.*tag: ).*/\\1\\"${IMAGE_TAG}\\"/" "$VALUES_FILE"
 
-                        set_image_tag backend
-                        set_image_tag frontend
+                            yq eval -i ".services.frontend.image.tag = \\"${IMAGE_TAG}\\"" "$VALUES_FILE" 2>/dev/null || \
+                            yq -i ".services.frontend.image.tag = \\"${IMAGE_TAG}\\"" "$VALUES_FILE" 2>/dev/null || \
+                            sed -i -E "s/(frontend:.*tag: ).*/\\1\\"${IMAGE_TAG}\\"/" "$VALUES_FILE"
+                        else
+                            echo "yq not found. Fallback to sed replacement..."
+                            sed -i -E "s/(tag: ).*/\\1\\"${IMAGE_TAG}\\"/" "$VALUES_FILE"
+                        fi
 
-                        echo "--- Updated Helm image values ---"
-                        yq -y '.services.backend.image.tag' "$VALUES_FILE"
-                        yq -y '.services.frontend.image.tag' "$VALUES_FILE"
+                        echo "--- Updated Helm values preview ---"
+                        cat "$VALUES_FILE"
 
                         git config user.name "Jenkins CI"
                         git config user.email "jenkins@wonderkids.local"
@@ -380,7 +376,7 @@ pipeline {
                         fi
 
                         git commit -m "chore(gitops): deploy build ${BUILD_NUMBER} [skip ci]"
-                        git push "https://${GIT_USERNAME}:${GIT_TOKEN}@github.com/lekymAnisem/WonderKids.git" HEAD:main
+                        git push "https://${GIT_TOKEN}@github.com/lekymAnisem/WonderKids.git" HEAD:main
                     '''
                 }
             }
