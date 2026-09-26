@@ -174,36 +174,81 @@ pipeline {
                                     # error, which surfaced as a Prisma P1013. node is
                                     # already required by the npm test step below, so
                                     # this adds no new dependency to the agent.
+                                    #
+                                    # wonderkids-secrets has been hand-entered in more
+                                    # than one shape: JSON, and dotenv wrapped in stray
+                                    # braces. Accept both, so a formatting slip in the
+                                    # console cannot fail the build. Defined as a shell
+                                    # variable and passed through "$PARSER_JS" so the
+                                    # JavaScript never needs shell quoting; the value
+                                    # is expanded literally, so quotes and backslashes
+                                    # inside it are safe.
+                                    PARSER_JS='
+                                    const parse = (raw) => {
+                                        const text = raw.trim();
+                                        if (!text) return null;
+
+                                        try {
+                                            const parsed = JSON.parse(text);
+                                            if (parsed && typeof parsed === "object" && !Array.isArray(parsed)) {
+                                                return { data: parsed, format: "json" };
+                                            }
+                                        } catch (err) {
+                                            // not JSON, fall through to dotenv
+                                        }
+
+                                        const body = text.replace(/^\{/, "").replace(/\}$/, "");
+                                        const data = {};
+                                        let found = false;
+
+                                        for (const line of body.split("\n")) {
+                                            const trimmed = line.trim();
+                                            if (!trimmed || trimmed.startsWith("#")) continue;
+                                            const eq = trimmed.indexOf("=");
+                                            if (eq < 1) continue;
+                                            const key = trimmed.slice(0, eq).trim().replace(/^["\x27]|["\x27]$/g, "");
+                                            if (!key) continue;
+                                            data[key] = trimmed.slice(eq + 1).trim();
+                                            found = true;
+                                        }
+
+                                        return found ? { data, format: "dotenv" } : null;
+                                    };
+
+                                    let raw = "";
+                                    process.stdin
+                                        .on("data", (chunk) => (raw += chunk))
+                                        .on("end", () => {
+                                            const result = parse(raw);
+                                            const mode = process.env.WK_SECRET_MODE;
+
+                                            if (mode === "format") {
+                                                process.stdout.write(result ? result.format : "unrecognized");
+                                                return;
+                                            }
+                                            if (mode === "keys") {
+                                                process.stdout.write(result ? Object.keys(result.data).join(", ") : "");
+                                                return;
+                                            }
+                                            if (!result) process.exit(1);
+                                            process.stdout.write(String(result.data[process.env.WK_SECRET_KEY] ?? ""));
+                                        });
+                                    '
+
                                     read_secret() {
-                                        printf '%s' "$SECRET_JSON" | node -e '
-                                            let raw = "";
-                                            process.stdin
-                                                .on("data", (chunk) => (raw += chunk))
-                                                .on("end", () => {
-                                                    try {
-                                                        const secret = JSON.parse(raw);
-                                                        process.stdout.write(String(secret[process.argv[1]] ?? ""));
-                                                    } catch {
-                                                        process.exit(1);
-                                                    }
-                                                });
-                                        ' "$1"
+                                        printf '%s' "$SECRET_JSON" \
+                                            | WK_SECRET_MODE=value WK_SECRET_KEY="$1" node -e "$PARSER_JS"
                                     }
 
                                     # Key names only, never values, for diagnostics.
                                     secret_keys() {
-                                        printf '%s' "$SECRET_JSON" | node -e '
-                                            let raw = "";
-                                            process.stdin
-                                                .on("data", (chunk) => (raw += chunk))
-                                                .on("end", () => {
-                                                    try {
-                                                        process.stdout.write(Object.keys(JSON.parse(raw)).join(", "));
-                                                    } catch {
-                                                        process.exit(1);
-                                                    }
-                                                });
-                                        '
+                                        printf '%s' "$SECRET_JSON" \
+                                            | WK_SECRET_MODE=keys node -e "$PARSER_JS"
+                                    }
+
+                                    secret_format() {
+                                        printf '%s' "$SECRET_JSON" \
+                                            | WK_SECRET_MODE=format node -e "$PARSER_JS"
                                     }
 
                                     # Trim whitespace and quotes a hand-edited secret
@@ -267,7 +312,9 @@ pipeline {
 
                                     if [ -z "$DIRECT_URL" ]; then
                                         echo "ERROR: 'wonderkids-secrets' has no usable DATABASE_URL or DIRECT_URL."
-                                        echo "       Keys present: $(secret_keys)"
+                                        echo "       Format: $(secret_format)   (length ${#SECRET_JSON})"
+                                        echo "       Keys:   $(secret_keys)"
+                                        echo "       The secret must hold either a JSON object or KEY=value lines."
                                         exit 1
                                     fi
 
